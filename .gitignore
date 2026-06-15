@@ -1,0 +1,46 @@
+node_modules
+.DS_Store
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+# Playwright
+test-results
+playwright-report
+playwright/.cache
+# Vitest
+coverage
+
+# AI
+
+.antigravitycli
+.claude/skills/
+CLAUDE.md
+session-handoff
+.eslintcache
+
+# Paraglide (generated)
+src/lib/paraglide
+
+# Prisma (generated)
+src/lib/server/db/generated
+
+# pnpm
+.pnpm-store

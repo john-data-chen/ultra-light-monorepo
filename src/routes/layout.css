@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* Manual dark mode: `dark:` variants key off a `.dark` class on <html>,
+   set by the SSR hook + the inline bootstrap script in app.html. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100;
+  }
+}

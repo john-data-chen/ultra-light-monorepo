@@ -1,0 +1,9 @@
+{
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "eslint.validate": ["javascript", "typescript", "svelte"],
+  "[svelte]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  }
+}
