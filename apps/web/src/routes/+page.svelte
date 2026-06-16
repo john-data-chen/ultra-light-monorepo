@@ -1,10 +1,10 @@
 <script lang="ts">
   import CategoryChart from "$lib/components/CategoryChart.svelte";
-  import * as Card from "$lib/components/ui/card";
-  import { Input } from "$lib/components/ui/input";
   import { pageTitle } from "$lib/constants";
   import { formatTWD } from "$lib/money";
   import * as m from "$lib/paraglide/messages";
+  import * as Card from "@ultra-light/ui/card";
+  import { Input } from "@ultra-light/ui/input";
 
   import type { PageProps } from "./$types";
 

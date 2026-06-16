@@ -2,14 +2,14 @@
   import { enhance } from "$app/forms";
   import { resolve } from "$app/paths";
   import { categoryLabel } from "$lib/categories";
-  import { Button } from "$lib/components/ui/button";
-  import ConfirmDialog from "$lib/components/ui/ConfirmDialog.svelte";
-  import { Input } from "$lib/components/ui/input";
   import { pageTitle } from "$lib/constants";
   import { formatTWD } from "$lib/money";
   import * as m from "$lib/paraglide/messages";
   import { createSortedTable, headerLabel } from "$lib/table/sorted-table.svelte";
   import { type ColumnDef } from "@tanstack/table-core";
+  import { Button } from "@ultra-light/ui/button";
+  import ConfirmDialog from "@ultra-light/ui/ConfirmDialog.svelte";
+  import { Input } from "@ultra-light/ui/input";
 
   import type { PageProps } from "./$types";
 

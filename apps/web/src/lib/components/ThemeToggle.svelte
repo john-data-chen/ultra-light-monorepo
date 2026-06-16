@@ -1,8 +1,8 @@
 <script lang="ts">
-  import * as Select from "$lib/components/ui/select";
   import * as m from "$lib/paraglide/messages";
   import { THEME_ORDER, type ThemePreference } from "$lib/theme";
   import { theme } from "$lib/theme.svelte";
+  import * as Select from "@ultra-light/ui/select";
 
   const labels: Record<ThemePreference, string> = {
     dark: m.theme_dark(),

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import * as Select from "$lib/components/ui/select";
   import * as m from "$lib/paraglide/messages";
   import { getLocale, locales, setLocale, type Locale } from "$lib/paraglide/runtime";
+  import * as Select from "@ultra-light/ui/select";
 
   const labels: Record<Locale, string> = {
     "zh-tw": "中文",

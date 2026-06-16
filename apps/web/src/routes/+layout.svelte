@@ -7,8 +7,8 @@
   import favicon from "$lib/assets/favicon.svg";
   import LocaleSwitcher from "$lib/components/LocaleSwitcher.svelte";
   import ThemeToggle from "$lib/components/ThemeToggle.svelte";
-  import { Button } from "$lib/components/ui/button";
   import * as m from "$lib/paraglide/messages";
+  import { Button } from "@ultra-light/ui/button";
   import { injectAnalytics } from "@vercel/analytics/sveltekit";
 
   import type { LayoutProps } from "./$types";

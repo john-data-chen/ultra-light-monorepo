@@ -2,11 +2,11 @@
   import { enhance } from "$app/forms";
   import { resolve } from "$app/paths";
   import { categoriesFor, categoryLabel, type TransactionType } from "$lib/categories";
-  import { Button } from "$lib/components/ui/button";
-  import * as Field from "$lib/components/ui/field";
-  import { Input } from "$lib/components/ui/input";
   import * as m from "$lib/paraglide/messages";
   import type { TransactionFormValues } from "$lib/transaction";
+  import { Button } from "@ultra-light/ui/button";
+  import * as Field from "@ultra-light/ui/field";
+  import { Input } from "@ultra-light/ui/input";
 
   let {
     values,
