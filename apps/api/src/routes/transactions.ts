@@ -9,9 +9,9 @@ import {
 import { TransactionCreate, TransactionUpdate, TransactionListQuery } from "@ultra-light/shared";
 import { Hono } from "hono";
 
-import { authMiddleware } from "../middleware/auth";
-import { rateLimitMiddleware } from "../middleware/rate-limit";
-import type { AppEnv } from "../types";
+import { authMiddleware } from "../middleware/auth.js";
+import { rateLimitMiddleware } from "../middleware/rate-limit.js";
+import type { AppEnv } from "../types.js";
 
 const transactions = new Hono<AppEnv>();
 

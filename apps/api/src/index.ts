@@ -1,13 +1,13 @@
 import { Hono } from "hono";
 import { logger } from "hono/logger";
 
-import admin from "./routes/admin";
-import auth from "./routes/auth";
-import docs from "./routes/docs";
-import login from "./routes/login";
-import stats from "./routes/stats";
-import transactions from "./routes/transactions";
-import type { AppEnv } from "./types";
+import admin from "./routes/admin.js";
+import auth from "./routes/auth.js";
+import docs from "./routes/docs.js";
+import login from "./routes/login.js";
+import stats from "./routes/stats.js";
+import transactions from "./routes/transactions.js";
+import type { AppEnv } from "./types.js";
 
 const app = new Hono<AppEnv>();
 

@@ -1,7 +1,7 @@
 import { apiReference } from "@scalar/hono-api-reference";
 import { Hono } from "hono";
 
-import { openApiSpec } from "../openapi";
+import { openApiSpec } from "../openapi.js";
 
 const docs = new Hono();
 

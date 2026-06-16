@@ -1,8 +1,8 @@
 import { listUsersWithStats, listRecentAudits } from "@ultra-light/db";
 import { Hono } from "hono";
 
-import { authMiddleware } from "../middleware/auth";
-import type { AppEnv } from "../types";
+import { authMiddleware } from "../middleware/auth.js";
+import type { AppEnv } from "../types.js";
 
 const admin = new Hono<AppEnv>();
 
