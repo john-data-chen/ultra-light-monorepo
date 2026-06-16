@@ -32,6 +32,8 @@
         </a>
         {#if data.user.role === "admin"}
           <a href={resolve("/admin")} class="text-foreground hover:underline">{m.nav_admin()}</a>
+          <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+          <a href="/api/docs" class="text-foreground hover:underline">{m.nav_api_docs()}</a>
         {/if}
       </nav>
       <div

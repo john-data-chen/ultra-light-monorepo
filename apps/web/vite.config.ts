@@ -15,6 +15,22 @@ export default defineConfig({
       strategy: ["cookie", "baseLocale"]
     })
   ],
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3001",
+        changeOrigin: true
+      }
+    }
+  },
+  preview: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3001",
+        changeOrigin: true
+      }
+    }
+  },
   test: {
     coverage: {
       provider: "v8",

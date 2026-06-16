@@ -47,21 +47,7 @@ export const handle: Handle = async ({ event, resolve }) => {
       );
     }
 
-    if (event.url.pathname.startsWith("/api/docs")) {
-      // Relaxed CSP for Scalar API docs
-      response.headers.set(
-        "Content-Security-Policy",
-        "default-src 'self'; " +
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; " +
-          "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
-          "font-src 'self' data: https://fonts.gstatic.com https://cdn.jsdelivr.net; " +
-          "img-src 'self' data: https://cdn.jsdelivr.net; " +
-          "connect-src 'self' https://cdn.jsdelivr.net; " +
-          "frame-ancestors 'none'; " +
-          "object-src 'none'; " +
-          "base-uri 'self';"
-      );
-    } else if (dev) {
+    if (dev) {
       response.headers.delete("Content-Security-Policy");
     }
   }

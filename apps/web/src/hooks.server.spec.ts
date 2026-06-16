@@ -83,37 +83,6 @@ describe("hooks.server handle", () => {
     expect(response.headers.get("Content-Security-Policy")).toBeNull();
   });
 
-  it("applies a relaxed CSP for the /api/docs path", async () => {
-    vi.doMock("$app/environment", () => ({ dev: false }));
-    const { handle } = await loadSubject();
-
-    const mockEvent = {
-      locals: {},
-      cookies: {
-        get: vi.fn(() => undefined)
-      },
-      request: new Request("http://localhost/api/docs"),
-      url: new URL("http://localhost/api/docs")
-    } as unknown as RequestEvent;
-
-    const mockResolve = vi.fn(async () => {
-      return new Response("<html></html>", {
-        headers: {
-          "Content-Type": "text/html",
-          "Content-Security-Policy": "default-src 'self';"
-        }
-      });
-    });
-
-    const response = await handle({ event: mockEvent, resolve: mockResolve });
-
-    const csp = response.headers.get("Content-Security-Policy");
-    expect(csp).toContain("https://cdn.jsdelivr.net");
-    expect(csp).toContain(
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net"
-    );
-  });
-
   it("does not add security headers to non-HTML responses", async () => {
     vi.doMock("$app/environment", () => ({ dev: false }));
     const { handle } = await loadSubject();
