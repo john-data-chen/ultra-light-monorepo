@@ -6,11 +6,16 @@
       "dependsOn": ["^build"],
       "outputs": [".svelte-kit/output", "dist", ".next"]
     },
+    "@ultra-light/db#build": {
+      "dependsOn": ["db:generate", "^build"],
+      "outputs": [".svelte-kit/output", "dist", ".next"]
+    },
     "check": {
       "dependsOn": ["^build"]
     },
     "db:generate": {
-      "cache": false
+      "cache": false,
+      "outputs": ["src/generated/**"]
     },
     "dev": {
       "cache": false,
