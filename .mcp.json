@@ -7,6 +7,12 @@
     "Prisma-Local": {
       "command": "npx",
       "args": ["-y", "prisma", "mcp"]
+    },
+    "context7": {
+      "command": "context7-mcp"
+    },
+    "chrome-devtools": {
+      "command": "chrome-devtools-mcp"
     }
   }
 }
