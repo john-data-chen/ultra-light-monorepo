@@ -1,3 +1,5 @@
+import { createHmac } from "node:crypto";
+
 import { describe, it, expect, vi, beforeAll, afterAll } from "vitest";
 
 vi.mock("@ultra-light/db", () => ({
@@ -38,8 +40,7 @@ import {
   deleteTransaction,
   recordAudit,
   getMonthlyStats,
-  listUsersWithStats,
-  listRecentAudits
+  listUsersWithStats
 } from "@ultra-light/db";
 
 import app from "./index";
@@ -47,7 +48,6 @@ import app from "./index";
 const mockDb = vi.mocked(db) as any;
 
 function makeSessionCookie(userId: number): string {
-  const { createHmac } = require("node:crypto");
   const payload = String(userId);
   const signature = createHmac("sha256", "test-secret").update(payload).digest("base64url");
   return `session=${payload}.${signature}`;

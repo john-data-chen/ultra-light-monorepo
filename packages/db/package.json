@@ -16,7 +16,8 @@
     "db:seed": "tsx --env-file=../../.env src/seed.ts",
     "db:studio": "prisma studio",
     "lint": "oxlint src/",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "@types/pg": "^8.20.0",
     "@ultra-light/typescript-config": "workspace:*",
+    "@vitest/coverage-v8": "4.1.9",
     "prisma": "^7.8.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"
