@@ -379,6 +379,7 @@ pnpm db:seed       # Seed demo users + sample transactions
 │           │   └── rate-limit.ts     # Fixed-window in-memory rate limiter
 │           ├── openapi.ts            # OpenAPI 3.1 spec definition
 │           ├── index.ts              # App entry (mounts routes, @hono/node-server)
+│           ├── vercel.ts             # Vercel serverless entry adapter
 │           └── types.ts              # AppEnv type for Hono generics
 ├── packages/
 │   ├── db/                           # Prisma schema + migrations + generated client
@@ -386,6 +387,7 @@ pnpm db:seed       # Seed demo users + sample transactions
 │   │   │   ├── schema.prisma         # Prisma schema (User, Transaction, AuditLog)
 │   │   │   └── migrations/           # SQL migration history
 │   │   └── src/
+│   │       ├── index.ts              # Database package entrypoint
 │   │       ├── client.ts             # PrismaClient singleton (pg driver adapter)
 │   │       ├── queries.ts            # Typed query helpers (transactions, stats)
 │   │       ├── audit.ts              # Audit log write helpers
@@ -395,6 +397,7 @@ pnpm db:seed       # Seed demo users + sample transactions
 │   │       └── generated/            # Prisma-generated client (git-ignored)
 │   ├── shared/                       # Shared Zod schemas + domain types
 │   │   └── src/
+│   │       ├── index.ts              # Shared package entrypoint
 │   │       ├── schemas.ts            # Zod request/response schemas
 │   │       ├── categories.ts         # Category keys + metadata
 │   │       ├── transaction.ts        # Transaction domain type
@@ -404,6 +407,7 @@ pnpm db:seed       # Seed demo users + sample transactions
 │   │       └── money.ts              # TWD integer ↔ display conversion
 │   ├── ui/                           # shadcn-svelte components (vendored; excluded from lint/format/coverage)
 │   │   └── src/
+│   │       ├── index.ts              # UI package entrypoint
 │   │       ├── button/               # Button component
 │   │       ├── card/                 # Card component
 │   │       ├── input/                # Input component

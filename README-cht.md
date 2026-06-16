@@ -376,6 +376,7 @@ pnpm db:seed       # Seed demo users + sample transactions
 │           │   └── rate-limit.ts     # 記憶體內 fixed-window 限流
 │           ├── openapi.ts            # OpenAPI 3.1 規範定義
 │           ├── index.ts              # App 進入點（掛載路由、@hono/node-server）
+│           ├── vercel.ts             # Vercel serverless 進入點轉接器
 │           └── types.ts              # Hono generics 用的 AppEnv 型別
 ├── packages/
 │   ├── db/                           # Prisma schema + migrations + generated client
@@ -383,6 +384,7 @@ pnpm db:seed       # Seed demo users + sample transactions
 │   │   │   ├── schema.prisma         # Prisma schema（User、Transaction、AuditLog）
 │   │   │   └── migrations/           # SQL migration 歷史
 │   │   └── src/
+│   │       ├── index.ts              # 資料庫套件進入點
 │   │       ├── client.ts             # PrismaClient 單例（pg driver adapter）
 │   │       ├── queries.ts            # 型別安全的查詢 helpers（transactions、stats）
 │   │       ├── audit.ts              # 稽核日誌寫入 helpers
@@ -392,6 +394,7 @@ pnpm db:seed       # Seed demo users + sample transactions
 │   │       └── generated/            # Prisma 生成的 client（git-ignored）
 │   ├── shared/                       # 共用 Zod schemas + 領域型別
 │   │   └── src/
+│   │       ├── index.ts              # 共用套件進入點
 │   │       ├── schemas.ts            # Zod 請求/回應 schemas
 │   │       ├── categories.ts         # Category 鍵值 + metadata
 │   │       ├── transaction.ts        # Transaction 領域型別
@@ -401,6 +404,7 @@ pnpm db:seed       # Seed demo users + sample transactions
 │   │       └── money.ts              # TWD 整數 ↔ 顯示轉換
 │   ├── ui/                           # shadcn-svelte 元件庫（vendored；排除於 lint/format/coverage）
 │   │   └── src/
+│   │       ├── index.ts              # UI 套件進入點
 │   │       ├── button/               # Button 元件
 │   │       ├── card/                 # Card 元件
 │   │       ├── input/                # Input 元件
