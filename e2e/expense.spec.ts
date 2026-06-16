@@ -47,14 +47,21 @@ test("John signs in, adds an expense, then deletes it", async ({ page, isMobile 
     : page.locator("tr").filter({ hasText: note });
   await expect(row).toBeVisible();
 
-  // renders a logout form on authed pages, so a bare submit selector would be ambiguous).
-  await row.locator('form[action="?/delete"] button[type="submit"]').click();
-  // ConfirmDialog renders shadcn-svelte's AlertDialog (bits-ui) — a portal with
-  // role="alertdialog", not a native <dialog> element.
+  // 4. Delete the row.
+  // We wrap the click in `toPass` because the DOM might still be re-rendering from the
+  // previous `update()` after adding the transaction, which can swallow the click.
   const dialog = page.getByRole("alertdialog");
-  await expect(dialog).toBeVisible();
+  await expect(async () => {
+    await row.locator('form[action="?/delete"] button[type="submit"]').click();
+    await expect(dialog).toBeVisible({ timeout: 2000 });
+  }).toPass({ timeout: 15_000 });
+
   // The footer is Cancel then Action, so the confirm button is the second one (locale-agnostic).
-  await dialog.getByRole("button").nth(1).click();
+  await expect(async () => {
+    await dialog.getByRole("button").nth(1).click();
+    // Verify the dialog closes to ensure the click registered before moving on.
+    await expect(dialog).not.toBeVisible({ timeout: 2000 });
+  }).toPass({ timeout: 15_000 });
 
   const rowAfterDelete = isMobile
     ? page.locator("li", { hasText: note })
