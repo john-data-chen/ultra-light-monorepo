@@ -1,73 +1,66 @@
 # AGENTS.md
 
-This file provides guidance to AI when working with code in this repository.
+Guidance for AI working in this repo. Terse on purpose — names of skills, MCP servers,
+tools, and commands are literal. Use them exactly as written.
 
 # Verification Workflow (MANDATORY)
 
-After **every** code modification, you MUST execute all three commands in order:
+After **every** code change, run in order — each must pass with zero errors/warnings:
 
 ```bash
-pnpm lint      # 1. Lint — must pass with zero errors and warnings
-pnpm build     # 2. Build — TypeScript compile + Vite build must succeed
-pnpm check     # 3. Check type
-## after user is confirmed every code modification, then verify below commands
-pnpm test      # 4. Test — must pass with zero errors and warnings
-pnpm test:e2e  # 5. E2E Test — must pass with zero errors and warnings
+pnpm lint     # 1. lint (oxlint TS/JS + ESLint .svelte), via turbo
+pnpm build    # 2. build, via turbo
+pnpm check    # 3. type check, via turbo
 ```
+
+After user confirms the change, also run:
+
+```bash
+pnpm test           # 4. unit/integration (vitest), via turbo
+pnpm test:coverage  # 5. coverage (web+api+shared >=90)
+pnpm test:e2e       # 6. e2e (playwright); needs live Postgres + dev servers
+```
+
+Any step fails → fix before proceeding. Add/update tests after user confirms results.
 
 # Commands
 
-- `pnpm dev` — Dev server (usually already running; do not execute unless you get confirmation)
-- `pnpm test` — `vitest run` (single run)
-- `pnpm test:coverage` — `vitest run --coverage`
-
-If any step fails, fix the issue immediately before proceeding.
-Additionally:
-
-- **Update or add test cases** after user has confirmed the results.
+- `pnpm dev` — turbo dev (web+api). Usually already running; don't start unless confirmed.
+- `pnpm build` / `pnpm check` / `pnpm lint` — turbo across all workspaces.
+- `pnpm test` / `pnpm test:coverage` / `pnpm test:e2e` — see workflow above.
+- `pnpm db:generate` / `pnpm db:migrate` / `pnpm db:push` / `pnpm db:seed` / `pnpm db:studio` — Prisma (`packages/db`).
+- Scope one workspace: `pnpm --filter @ultra-light/<web|api|db|shared|ui> <script>`.
 
 # Architecture
 
-check README.md in root folder
+Turborepo monorepo. `apps/web` (SvelteKit, SSR-proxies the API) + `apps/api` (Hono) +
+`packages/*` (db, shared, ui, configs). Full detail: README.md (root).
 
-# SKill for coding tasks
+# Skills (`.agents/skills/`) — load when trigger matches
 
-- karpathy-guidelines: use it every time in all coding tasks
+| Skill                                  | Use when                                                                                                   |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `karpathy-guidelines`                  | **Every** coding task — write/review/refactor; surgical changes.                                           |
+| `turborepo`                            | turbo.json, task pipeline, dependsOn, caching, `--filter`, monorepo layout.                                |
+| `hono`                                 | Building/editing the Hono API; routing, middleware, validation, testing (`apps/api`, imports from `hono`). |
+| `svelte-code-writer`                   | Create/edit/analyze any `.svelte` / `.svelte.ts` / `.svelte.js`.                                           |
+| `svelte-core-bestpractices`            | Writing/analyzing Svelte — reactivity, events, styling, libs.                                              |
+| `shadcn-svelte`                        | shadcn-svelte UI — add/update/fix/compose components, `components.json` (`packages/ui`).                   |
+| `doc-coauthoring`                      | Writing/editing docs, proposals, specs, decision docs (e.g. READMEs).                                      |
+| `session-handoff`                      | Task plans + execution logs (`ai-docs/tasks.md`, `ai-docs/session-log.md`).                                |
+| `prisma-cli`                           | Prisma CLI — init/generate/migrate/db/studio/validate/format.                                              |
+| `prisma-client-api`                    | Prisma queries — findMany/create/update/delete/`$transaction`, filters, relations.                         |
+| `prisma-database-setup`                | Configure Prisma DB provider / connection issues.                                                          |
+| `prisma-postgres`                      | Prisma Postgres setup/ops — Console, create-db, Management API.                                            |
+| `prisma-driver-adapter-implementation` | Implement/modify a Prisma v7 driver adapter.                                                               |
 
-# Svelte Tools for AI
+# MCP servers (`.mcp.json`) — use when trigger matches
 
-## Skills
+| Server            | Use when                                                                                                                                                                                                   |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `svelte`          | Any Svelte/SvelteKit work. Tools: `list-sections` (first), `get-documentation`, `svelte-autofixer` (run until clean before showing code), `playground-link` (only after user OK, never for files in repo). |
+| `Prisma-Local`    | DB migrations/inspection. Tools: `migrate-dev`, `migrate-status`, `migrate-reset`, `Prisma-Studio`.                                                                                                        |
+| `context7`        | Fetch current docs for any library/framework/API/CLI before answering. Tools: `resolve-library-id` then `query-docs`. Prefer over web search for library docs.                                             |
+| `chrome-devtools` | Verify a running app — navigate, snapshot, screenshot, console, network, `lighthouse_audit`.                                                                                                               |
 
-### svelte-code-writer
-
-CLI tools for Svelte 5 documentation lookup and code analysis. MUST be used whenever creating, editing or analyzing any Svelte component (.svelte) or Svelte module (.svelte.ts/.svelte.js). If possible, this skill should be executed within the svelte-file-editor agent for optimal results.
-
-### svelte-core-bestpractices
-
-Guidance on writing fast, robust, modern Svelte code. Load this skill whenever in a Svelte project and asked to write/edit or analyze a Svelte component or module. Covers reactivity, event handling, styling, integration with libraries and more.
-
-## Svelte MCP server
-
-You are able to use the Svelte MCP server, where you have access to comprehensive Svelte 5 and SvelteKit documentation. Here's how to use the available tools effectively:
-
-### Available Svelte MCP Tools:
-
-#### 1. list-sections
-
-Use this FIRST to discover all available documentation sections. Returns a structured list with titles, use_cases, and paths.
-When asked about Svelte or SvelteKit topics, ALWAYS use this tool at the start of the chat to find relevant sections.
-
-#### 2. get-documentation
-
-Retrieves full documentation content for specific sections. Accepts single or multiple sections.
-After calling the list-sections tool, you MUST analyze the returned documentation sections (especially the use_cases field) and then use the get-documentation tool to fetch ALL documentation sections that are relevant for the user's task.
-
-#### 3. svelte-autofixer
-
-Analyzes Svelte code and returns issues and suggestions.
-You MUST use this tool whenever writing Svelte code before sending it to the user. Keep calling it until no issues or suggestions are returned.
-
-#### 4. playground-link
-
-Generates a Svelte Playground link with the provided code.
-After completing the code, ask the user if they want a playground link. Only call this tool after user confirmation and NEVER if code was written to files in their project.
+If a required MCP/skill is missing or disabled, warn the user before starting.
