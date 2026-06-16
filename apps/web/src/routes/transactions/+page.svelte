@@ -185,6 +185,7 @@
                     deleteDialogOpen = true;
                   } else {
                     pendingDeleteForm = null;
+                    deleteDialogOpen = false;
                   }
                 }}
               >
@@ -293,6 +294,7 @@
                         deleteDialogOpen = true;
                       } else {
                         pendingDeleteForm = null;
+                        deleteDialogOpen = false;
                       }
                     }}
                   >
