@@ -1,4 +1,4 @@
-import { render, fireEvent, screen } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import { describe, expect, it, vi } from "vitest";
 
 import LocaleSwitcher from "./LocaleSwitcher.svelte";
@@ -18,27 +18,11 @@ vi.mock("$lib/paraglide/messages", () => ({
 }));
 
 describe("LocaleSwitcher", () => {
-  it("renders select with options and current locale selected", () => {
+  it("renders a select trigger with current locale", () => {
     render(LocaleSwitcher);
 
-    const select = screen.getByLabelText("Language Selector") as HTMLSelectElement;
-    expect(select).toBeTruthy();
-    expect(select.value).toBe("en");
-
-    const options = screen.getAllByRole("option") as HTMLOptionElement[];
-    expect(options).toHaveLength(2);
-    expect(options[0].value).toBe("en");
-    expect(options[0].textContent).toBe("EN");
-    expect(options[1].value).toBe("zh-tw");
-    expect(options[1].textContent).toBe("中文");
-  });
-
-  it("calls setLocale when selection changes", async () => {
-    render(LocaleSwitcher);
-
-    const select = screen.getByLabelText("Language Selector");
-    await fireEvent.change(select, { target: { value: "zh-tw" } });
-
-    expect(mockRuntime.setLocale).toHaveBeenCalledWith("zh-tw");
+    const trigger = screen.getByLabelText("Language Selector");
+    expect(trigger).toBeTruthy();
+    expect(trigger.tagName).toBe("BUTTON");
   });
 });

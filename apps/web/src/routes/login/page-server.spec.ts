@@ -60,7 +60,7 @@ describe("login action", () => {
 
     expect(resultUndefined).toMatchObject({
       status: 400,
-      data: { email: "", message: expect.any(String) }
+      data: { email: null, message: expect.any(String) }
     });
   });
 

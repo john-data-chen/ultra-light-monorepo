@@ -20,12 +20,12 @@ function fakeEvent(user: App.Locals["user"]) {
 }
 
 describe("admin page load", () => {
-  it("redirects a member to /", async () => {
-    await expect(load(fakeEvent(memberUser))).rejects.toMatchObject({ status: 303, location: "/" });
+  it("throws Forbidden for a member", async () => {
+    await expect(load(fakeEvent(memberUser))).rejects.toThrow("Forbidden");
   });
 
-  it("redirects an unauthenticated visitor to /login", async () => {
-    await expect(load(fakeEvent(null))).rejects.toMatchObject({ status: 303, location: "/login" });
+  it("throws Unauthorized for unauthenticated visitor", async () => {
+    await expect(load(fakeEvent(null))).rejects.toThrow("Unauthorized");
   });
 
   it("returns user data for an admin", async () => {

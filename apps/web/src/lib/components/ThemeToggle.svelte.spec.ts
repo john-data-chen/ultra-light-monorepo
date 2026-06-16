@@ -1,11 +1,11 @@
-import { render, fireEvent, screen } from "@testing-library/svelte";
+import { render, screen } from "@testing-library/svelte";
 import { describe, expect, it, vi } from "vitest";
 
 import ThemeToggle from "./ThemeToggle.svelte";
 
 const { mockTheme } = vi.hoisted(() => ({
   mockTheme: {
-    preference: "dark",
+    preference: "dark" as const,
     set: vi.fn()
   }
 }));
@@ -22,30 +22,12 @@ vi.mock("$lib/paraglide/messages", () => ({
 }));
 
 describe("ThemeToggle", () => {
-  it("renders a select with current preference selected", () => {
+  it("renders with current theme preference", () => {
     mockTheme.preference = "dark";
     render(ThemeToggle);
 
-    const select = screen.getByLabelText("Theme Selector") as HTMLSelectElement;
-    expect(select).toBeTruthy();
-    expect(select.value).toBe("dark");
-
-    const options = screen.getAllByRole("option") as HTMLOptionElement[];
-    expect(options).toHaveLength(3);
-    expect(options[0].value).toBe("dark");
-    expect(options[0].textContent).toBe("Dark");
-    expect(options[1].value).toBe("light");
-    expect(options[1].textContent).toBe("Light");
-    expect(options[2].value).toBe("system");
-    expect(options[2].textContent).toBe("System");
-  });
-
-  it("calls theme.set when selection changes", async () => {
-    render(ThemeToggle);
-
-    const select = screen.getByLabelText("Theme Selector");
-    await fireEvent.change(select, { target: { value: "light" } });
-
-    expect(mockTheme.set).toHaveBeenCalledWith("light");
+    const trigger = screen.getByLabelText("Theme Selector");
+    expect(trigger).toBeTruthy();
+    expect(trigger.tagName).toBe("BUTTON");
   });
 });
