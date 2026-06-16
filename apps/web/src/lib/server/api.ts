@@ -1,4 +1,6 @@
-const BASE_URL = process.env.API_BASE_URL || "http://localhost:3001";
+import { env } from "$env/dynamic/private";
+
+const BASE_URL = env.API_BASE_URL || "http://localhost:3001";
 
 interface ApiOptions {
   cookie?: string;
@@ -28,7 +30,12 @@ export async function apiFetch<T>(path: string, options: ApiOptions = {}): Promi
     throw new Error(error.message || `API error: ${response.status}`);
   }
 
-  return response.json();
+  if (response.status === 204) {
+    return undefined as unknown as T;
+  }
+
+  const text = await response.text();
+  return text ? JSON.parse(text) : (undefined as unknown as T);
 }
 
 export function getCookieHeader(cookies: { get: (name: string) => string | undefined }): string {

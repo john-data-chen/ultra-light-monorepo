@@ -208,6 +208,35 @@ MCP 讓 AI 工具可直接和開發基礎設施互動，從而消除上下文切
 
 這些檔案是 AI 輔助開發的專案工作守則，包含主要驗證流程（`pnpm lint` → `pnpm build` → `pnpm check`）、常用指令，以及不同任務應使用的 skills/MCP servers。AI 在修改此專案前應先讀取這些指引。
 
+## 安裝與執行 (Setup Instructions)
+
+1. `pnpm install`
+2. 參考 `.env.example` 設定 `.env`。
+3. `pnpm db:push` / `pnpm db:seed`
+4. `pnpm dev`
+
+## Vercel 部署 (Vercel Deployment)
+
+本專案將 SvelteKit 前端與 API 後端拆分為 **兩個獨立的 Vercel 專案** 部署，以實現解耦和獨立擴展。
+
+1. **API 專案** (`apps/api`)：
+   - **Framework Preset**: None / Other (或使用 Vercel 預設的 Node)
+   - **Build Command**: `turbo run build --filter=@ultra-light/api`（此步驟會使用 `esbuild` 打包 workspace 依賴，並執行 `prisma generate`）。
+   - **環境變數 (Environment Variables)**:
+     - `DATABASE_URL` (必須指向正式環境的 PostgreSQL 實例，如 Prisma Postgres 或 Neon)
+     - `SESSION_SECRET` (一組長度足夠的隨機字串)
+
+2. **Web 專案** (`apps/web`)：
+   - **Framework Preset**: SvelteKit
+   - **Build Command**: `turbo run build --filter=@ultra-light/web`
+   - **環境變數 (Environment Variables)**:
+     - `API_BASE_URL` (指向已部署的 API 專案 URL，例如 `https://your-api-project.vercel.app`)
+     - `SESSION_SECRET` (必須與 API 專案設定的 secret 完全相同)
+
+> **注意：關於 Workspaces 依賴與 Vercel:** Vercel 預設的 Node.js builder 在執行期無法解析 TypeScript workspace 依賴（如 `@ultra-light/shared`、`@ultra-light/db`）。為了解決此問題，`apps/api` 的 build script 會在部署前將 API 進入點與所有 workspace 依賴打包成單一個可執行的 JavaScript 檔案（`api/index.js`）。
+
+---
+
 人機協作開發流程：
 
 ```mermaid

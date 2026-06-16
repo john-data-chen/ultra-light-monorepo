@@ -1,8 +1,9 @@
+import { env } from "$env/dynamic/private";
 import { redirect } from "@sveltejs/kit";
 
 import type { Actions, PageServerLoad } from "./$types";
 
-const BASE_URL = process.env.API_BASE_URL || "http://localhost:3001";
+const BASE_URL = env.API_BASE_URL || "http://localhost:3001";
 
 export const load: PageServerLoad = () => {
   redirect(307, "/");
