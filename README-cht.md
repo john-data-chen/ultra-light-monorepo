@@ -1,14 +1,11 @@
-# SvelteKit: 多人(家庭)共享線上記帳本 | 包含人工智慧輔助工程流程的完整入門套件
+# Ultra Light Monorepo：多使用者線上記帳本 — Hono API + SvelteKit 前端
 
-[![codecov](https://codecov.io/gh/john-data-chen/sveltekit-starter-kit/graph/badge.svg?token=9Mdwd8ibQs)](https://codecov.io/gh/john-data-chen/sveltekit-starter-kit)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_sveltekit-starter-kit&metric=alert_status&token=6c61941d26a0ba1e36bc438f28dba039c8e3700d)](https://sonarcloud.io/summary/new_code?id=john-data-chen_sveltekit-starter-kit)
 [![CI](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-這是一個產品級別的 SvelteKit starter kit，以真實可用的多使用者 **線上記帳本** 為核心，所有帳號都可以新增支出、收入，並查看統計資訊。而管理帳號可以看到所有帳號的交易紀錄。
-這展示技術決策、品質工程，以及 AI 輔助開發的實作方式。技術棧包含 Svelte 5（runes mode）、TypeScript、Tailwind CSS v4、Prisma ORM 與 PostgreSQL。
+產品級別的 monorepo 架構，以真實可用的多使用者 **線上記帳本** 為核心。所有帳號都可以新增支出、收入，並查看統計資訊。管理帳號可以看到所有帳號的交易紀錄。
 
-本專案刻意聚焦於產品團隊在意的能力：型別化、模組化的 **TypeScript / Node.js**；有意識的 **API、資料流與 RBAC** 設計；搭配 ORM 驅動 **schema migration** 與執行時驗證的 **PostgreSQL**；**AI 輔助（Harness）工程**；以及具紀律、可驗證的交付。
+採用 **Turborepo monorepo** 架構，包含獨立的 **Hono.js API** 後端與 **SvelteKit** 前端，部署為兩個獨立的 Vercel 專案。UI 使用 **shadcn-svelte** 元件庫搭配 Tailwind CSS v4。
 
 英文版本請見 **[README.md](./README.md)**。
 
@@ -57,23 +54,24 @@
 
 評估過引入第三方 UI 元件庫，最終選擇建立內部的 Svelte 5 primitives 層 — 理由：維持極少依賴的原則、無依賴成本的抽象化、符合無障礙標準（a11y-correct）的原生 `<dialog>`，以及利用 Svelte 5 snippets 達到純 HTML 屬性傳遞（不需透過 bind prop-drilling）。
 
-| 類型          | 選擇                                           | 理由                                                                                  |
-| ------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Framework     | SvelteKit 2 + Svelte 5（runes）                | 精細的響應性、極簡樣板、SSR + 表單操作                                                |
-| Styling       | Tailwind CSS v4（Vite plugin）                 | 公用優先、零執行時間，透過 v4 Vite plugin 加速建置                                    |
-| Database      | Prisma ORM + PostgreSQL                        | 宣告式 schema 作為唯一真相來源；型別安全的 generated client、內建 migrations          |
-| DB Driver     | `pg`（經 `@prisma/adapter-pg`）                | Prisma v7 driver-adapter 工作流；快速 pooled driver，適合 Vercel Node serverless 服務 |
-| Auth          | Password-less email + signed `httpOnly` cookie | 不儲存密碼；使用最小且清楚的 session model                                            |
-| Authz/RBAC    | 路由層級的權限守衛（`requireAdmin`）           | 基於資料庫使用者角色（`admin` 與 `member`）的嚴格存取控制                             |
-| Rate Limiting | 記憶體內的 fixed-window 限流（登入 + API）     | 簡易的防暴力破解/濫用；生產環境會改用 Vercel KV / Redis                               |
-| Security      | Nonce CSP + HSTS + 強化的回應標頭              | 縱深防禦；僅 Scalar `/api/docs` 放寬 CSP，dev 模式移除 CSP 以支援 Vite HMR            |
-| Validation    | Zod（server-side schemas）                     | 在 form action 邊界做執行時驗證 — 編譯檢查交給 TS，輸入檢查交給 Zod                   |
-| REST API      | 完整的 CRUD API + JSON 回應封裝                | 分離的 REST 層以利外部系統整合或手機端應用呼叫                                        |
-| API Docs      | Scalar UI + Zod 4 原生 OpenAPI 匯出            | 直接由 Zod 模型動態產生的零阻力互動式 API 文件                                        |
-| Tables        | `@tanstack/table-core`                         | Headless，無 UI 依賴，將排序狀態同步至 URL 並且純粹使用 Svelte 元件渲染               |
-| Charts        | Pure CSS donut                                 | 不引入圖表套件，減少打包體積並保留完整控制                                            |
-| i18n          | Paraglide JS（`@inlang/paraglide-js`）         | 類型安全、tree-shakeable 翻譯；支援英文與繁體中文                                     |
-| Deploy        | `@sveltejs/adapter-vercel`（Node serverless）  | `pg` TCP driver 需要 Node runtime                                                     |
+| 類型          | 選擇                                           | 理由                                                                                   |
+| ------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Monorepo      | Turborepo + pnpm workspaces                    | Vercel 原生整合、任務快取/編排、共享 packages                                          |
+| 前端          | SvelteKit 2 + Svelte 5（runes）                | 精細的響應性、SSR + 表單操作、server-side proxy 至 Hono API                            |
+| API           | Hono.js（Node runtime）                        | 輕量快速、支援 `@hono/zod-openapi`、部署為獨立 Vercel 專案                             |
+| Styling       | Tailwind CSS v4 + shadcn-svelte                | 公用優先樣式搭配可組合、無障礙的 UI 元件（bits-ui）                                    |
+| Database      | Prisma ORM + PostgreSQL                        | 宣告式 schema 作為唯一真相來源；型別安全的 generated client，在 `packages/db`          |
+| DB Driver     | `pg`（經 `@prisma/adapter-pg`）                | Prisma v7 driver-adapter 工作流；快速 pooled driver，適合 Vercel Node serverless 服務  |
+| Auth          | Password-less email + signed `httpOnly` cookie | 不儲存密碼；Hono API 為 session 驗證的唯一真相來源                                     |
+| Authz/RBAC    | Hono middleware + SvelteKit hooks              | 基於資料庫使用者角色（`admin` 與 `member`）的嚴格存取控制                              |
+| Rate Limiting | 記憶體內的 fixed-window 限流（Hono API）       | 簡易的防暴力破解/濫用；生產環境會改用 Vercel KV / Redis                                |
+| Security      | Nonce CSP + HSTS + 強化的回應標頭              | 縱深防禦；docs UI 放寬 CSP，dev 模式移除 CSP                                           |
+| Validation    | Zod（`packages/shared` 共享 schemas）          | 在 API 邊界做執行時驗證 — 編譯檢查交給 TS，輸入檢查交給 Zod                            |
+| API Docs      | OpenAPI 3.1 + Scalar UI                        | 由 Hono API 於 `/api/openapi.json` + `/api/docs` 提供                                  |
+| Tables        | `@tanstack/table-core`                         | Headless，排序狀態同步至 URL，純粹使用 Svelte 元件渲染                                 |
+| Charts        | Pure CSS donut                                 | 不引入圖表套件，減少打包體積並保留完整控制                                             |
+| i18n          | Paraglide JS（`@inlang/paraglide-js`）         | 類型安全、tree-shakeable 翻譯；支援英文與繁體中文                                      |
+| Deploy        | 兩個 Vercel 專案（web + api）                  | SvelteKit 使用 `adapter-vercel`，Hono API 使用 `@hono/node-server`；Turborepo 驅動建置 |
 
 ### 品質保證
 

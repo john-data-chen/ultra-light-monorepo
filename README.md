@@ -1,14 +1,11 @@
-# SvelteKit: A shared online accounting service for multiple users (family) | A full-fledged Starter Kit with AI-assisted engineering processes
+# Ultra Light Monorepo: Multi-user Online Ledger with Hono API + SvelteKit Frontend
 
-[![codecov](https://codecov.io/gh/john-data-chen/sveltekit-starter-kit/graph/badge.svg?token=9Mdwd8ibQs)](https://codecov.io/gh/john-data-chen/sveltekit-starter-kit)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_sveltekit-starter-kit&metric=alert_status&token=6c61941d26a0ba1e36bc438f28dba039c8e3700d)](https://sonarcloud.io/summary/new_code?id=john-data-chen_sveltekit-starter-kit)
 [![CI](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This is a product-level SvelteKit starter kit centered around a real, multi-user (family) **online ledger**, where all accounts can add expenses and income, and view statistics. The administrator account can view the transaction history of all accounts.
-It demonstrates technical decision-making, quality engineering, and AI-assisted development practices. Built with Svelte 5 (runes mode), TypeScript, Tailwind CSS v4, and Prisma ORM + PostgreSQL.
+A product-level monorepo centered around a real, multi-user (family) **online ledger**, where all accounts can add expenses and income, and view statistics. The administrator account can view the transaction history of all accounts.
 
-It is deliberately scoped to showcase the competencies a product team hires for: typed, modular **TypeScript / Node.js**; intentional **API, data-flow, and RBAC** design; **PostgreSQL** with ORM-driven **schema migrations** and runtime validation; **AI-assisted (Harness) engineering**; and disciplined, verifiable delivery.
+Built as a **Turborepo monorepo** with a standalone **Hono.js API** backend and a **SvelteKit** frontend, deployed as two separate Vercel projects. UI uses **shadcn-svelte** components with Tailwind CSS v4.
 
 **[Live Demo](https://sveltekit-starter-kit.vercel.app/login)** — press **Continue With Email** to sign in instantly as a seeded demo user.
 **[Live API Docs](https://sveltekit-starter-kit.vercel.app/api/docs)** — interactive OpenAPI 3.1 reference (Scalar UI).
@@ -60,21 +57,22 @@ Evaluated adopting a UI component library; chose an internal Svelte 5 primitives
 
 | Type          | Choice                                         | Rationale                                                                                                     |
 | ------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Framework     | SvelteKit 2 + Svelte 5 (runes)                 | Fine-grained reactivity, minimal boilerplate, SSR + form actions                                              |
-| Styling       | Tailwind CSS v4 (Vite plugin)                  | Utility-first, zero-runtime, fast builds via the v4 Vite plugin                                               |
-| Database      | Prisma ORM + PostgreSQL                        | Declarative schema as single source of truth; type-safe generated client, built-in migrations                 |
+| Monorepo      | Turborepo + pnpm workspaces                    | First-party Vercel integration, task caching/orchestration, shared packages                                   |
+| Frontend      | SvelteKit 2 + Svelte 5 (runes)                 | Fine-grained reactivity, SSR + form actions, server-side proxy to Hono API                                    |
+| API           | Hono.js (Node runtime)                         | Lightweight, fast, OpenAPI support via `@hono/zod-openapi`, deployed as separate Vercel project               |
+| Styling       | Tailwind CSS v4 + shadcn-svelte                | Utility-first styling with composable, accessible UI primitives (bits-ui)                                     |
+| Database      | Prisma ORM + PostgreSQL                        | Declarative schema as single source of truth; type-safe generated client, in `packages/db`                    |
 | DB Driver     | `pg` via `@prisma/adapter-pg`                  | Prisma v7 driver-adapter workflow; fast pooled driver, pairs with the Vercel Node serverless runtime          |
-| Auth          | Password-less email + signed `httpOnly` cookie | No password storage; minimal, secure session model                                                            |
-| Authz/RBAC    | Route-level role guards (`requireAdmin`)       | Strict access control based on DB-backed user roles (`admin` vs `member`)                                     |
-| Rate Limiting | In-memory fixed-window limiter (login + API)   | Simple protection against brute-force attacks/abuse; Vercel KV/Redis will be used in production environments. |
-| Security      | Nonce CSP + HSTS + hardened response headers   | Defense-in-depth; relaxed CSP only for Scalar `/api/docs`, CSP stripped in dev for Vite HMR                   |
-| Validation    | Zod (server-side schemas)                      | Runtime validation at form-action boundaries — TS at compile time, Zod for untrusted input                    |
-| REST API      | Full CRUD endpoints + JSON response envelopes  | Separated REST layer to facilitate external integrations or mobile clients                                    |
-| API Docs      | Scalar UI + native Zod 4 OpenAPI extraction    | Zero-friction interactive documentation generated dynamically from Zod schemas                                |
+| Auth          | Password-less email + signed `httpOnly` cookie | No password storage; Hono API is single source of truth for session validation                                |
+| Authz/RBAC    | Hono middleware + SvelteKit hooks              | Strict access control based on DB-backed user roles (`admin` vs `member`)                                     |
+| Rate Limiting | In-memory fixed-window limiter (Hono API)      | Simple protection against brute-force attacks/abuse; Vercel KV/Redis will be used in production environments. |
+| Security      | Nonce CSP + HSTS + hardened response headers   | Defense-in-depth; relaxed CSP for docs UI, stripped in dev for Vite HMR                                       |
+| Validation    | Zod (shared schemas in `packages/shared`)      | Runtime validation at API boundaries — TS at compile time, Zod for untrusted input                            |
+| API Docs      | OpenAPI 3.1 + Scalar UI                        | Spec served by Hono API at `/api/openapi.json` + `/api/docs`                                                  |
 | Tables        | `@tanstack/table-core`                         | Headless, URL-synchronized sorting, rendered via pure Svelte components                                       |
 | Charts        | Pure CSS donut                                 | Zero charting dependency — smaller bundle, full control                                                       |
 | i18n          | Paraglide JS (`@inlang/paraglide-js`)          | Type-safe, tree-shakeable messages; English + Traditional Chinese                                             |
-| Deploy        | `@sveltejs/adapter-vercel` (Node serverless)   | Node runtime required for the `pg` TCP driver                                                                 |
+| Deploy        | Two Vercel projects (web + api)                | SvelteKit on `adapter-vercel`, Hono API on `@hono/node-server`; Turborepo drives build pipeline               |
 
 ### Quality Assurance
 
@@ -153,7 +151,9 @@ The Admin Governance view aggregates per-user activity (transaction counts, tota
 
 **[Live API Docs →](https://sveltekit-starter-kit.vercel.app/api/docs)** — interactive OpenAPI 3.1 reference (Scalar UI).
 
-A dedicated REST layer (`/api/transactions`, `/api/stats`) exposes full CRUD with cookie-based auth, per-user data isolation, pagination, and `429` rate limiting — the same API, data-flow, and permission boundaries a frontend, mobile client, or external integration would consume. Every endpoint's request/response shape is defined once as a **Zod schema** (the single source of truth), which drives runtime validation _and_ the live OpenAPI 3.1 spec at `/api/openapi.json`, rendered via Scalar at `/api/docs`. The docs are generated from the schema, so they never drift from the implementation.
+The Hono.js API (`apps/api`) owns all business logic and data access. SvelteKit (`apps/web`) proxies requests server-to-server via `apiFetch()`, preserving SSR/SEO and keeping cookies same-origin for the browser.
+
+Full CRUD endpoints (`/api/transactions`, `/api/stats`, `/api/auth`, `/api/admin`) with cookie-based auth, per-user data isolation, pagination, and rate limiting. The OpenAPI 3.1 spec is served at `/api/openapi.json` and rendered via Scalar at `/api/docs`.
 
 ---
 
@@ -252,27 +252,23 @@ pnpm db:migrate        # Apply migrations to the local DB
 pnpm db:seed           # Seed 3 demo users + sample transactions
 
 # Run
-pnpm dev               # Development server
-pnpm test              # Unit tests
+pnpm dev               # Start dev server (web + api)
+pnpm test              # Unit tests (all packages)
 pnpm test:e2e          # E2E tests (needs a seeded DB + dev server)
-pnpm build             # Production build
+pnpm build             # Production build (all packages)
 ```
 
-The default `DATABASE_URL` in `.env.example` matches `compose.yaml`. Set `SESSION_SECRET` to any long random string (e.g., use `openssl rand -base64 32` to generate) to sign the session cookie. Then open the dev server (default `http://localhost:5173`) and press **Continue With Email** to sign in as `john@example.com`.
+The default `DATABASE_URL` in `.env.example` matches `compose.yaml`. Set `SESSION_SECRET` to any long random string (e.g., use `openssl rand -base64 32` to generate) to sign the session cookie. The web app runs on `http://localhost:5173` and proxies API calls to Hono on `http://localhost:3001`.
 
 ### Commands
 
 ```bash
-pnpm dev           # Start dev server
-pnpm build         # TypeScript compile + Vite build
-pnpm preview       # Preview production build
-pnpm lint          # oxlint --fix (JS/TS) + eslint (Svelte with caching)
-pnpm format        # oxfmt --write .
-pnpm test          # vitest run
-pnpm test:coverage # vitest run --coverage
+pnpm dev           # Start all dev servers (turbo)
+pnpm build         # Build all packages (turbo)
+pnpm lint          # Lint all packages (oxlint + eslint)
+pnpm check         # Type-check all packages (svelte-check + tsc)
+pnpm test          # Run all tests (vitest)
 pnpm test:e2e      # Playwright e2e
-pnpm check         # svelte-kit sync + svelte-check
-pnpm commit        # git-cz (commitizen with commitlint)
 pnpm db:start      # docker compose up (PostgreSQL)
 pnpm db:generate   # prisma generate
 pnpm db:migrate    # prisma migrate dev
@@ -282,21 +278,16 @@ pnpm db:seed       # Seed demo users + sample transactions
 
 ### Testing Architecture
 
-- **Dual Projects**: `server` (Node.js, for API/utilities) and `client` (JSDOM, Svelte components & runes).
+- **Monorepo Testing**: Each package (`apps/api`, `apps/web`, `packages/shared`, `packages/db`) has its own Vitest config; `pnpm test` runs all via Turborepo.
+- **API Tests**: Integration tests using Hono's `app.request()` — no server startup needed.
+- **Web Tests**: Dual projects — `server` (Node.js, for API/utilities) and `client` (JSDOM, Svelte components & runes).
 - **Naming Conventions**:
   - `*.spec.ts`: Executed in `server` environment.
   - `*.svelte.spec.ts`: Executed in `client` (JSDOM) environment.
 - **Commands**:
-  - `pnpm test`: Run all unit tests.
+  - `pnpm test`: Run all unit tests across the monorepo.
   - `pnpm test:coverage`: Run coverage with >=80% thresholds.
   - `pnpm test:e2e`: Run Playwright E2E browser tests.
-- **Client Test Example**:
-  ```ts
-  import { render, screen } from "@testing-library/svelte";
-  import Button from "./Button.svelte";
-  render(Button, { props: { children: () => "Click" } });
-  expect(screen.getByRole("button", { name: "Click" })).toBeTruthy();
-  ```
 
 ---
 
@@ -304,107 +295,124 @@ pnpm db:seed       # Seed demo users + sample transactions
 
 ```text
 .
-├── .agents/skills/              # Repo-specific AI skills used by AGENTS.md / CLAUDE.md
-│   ├── doc-coauthoring/         # Documentation co-authoring workflow
-│   ├── prisma-*/                # Prisma ORM conventions (cli, client-api, database-setup, postgres, driver-adapter)
-│   ├── karpathy-guidelines/     # Surgical-change and verification discipline
-│   ├── session-handoff/         # (private, not committed) Maintains ai-docs/tasks.md + session-log.md
-│   ├── svelte-code-writer/      # Svelte MCP/CLI lookup and autofix workflow
-│   └── svelte-core-bestpractices/
-├── .codex/                      # Codex AI configuration
-├── .github/workflows/ci.yml     # GitHub Actions: install, test, Codecov, SonarQube
-├── .husky/                      # Git hooks (pre-commit, commit-msg)
-├── .opencode/                   # OpenCode AI configuration
-├── .vscode/                     # VS Code settings + extension recommendations
-├── ai-docs/                     # AI task template, task plan, and session log
-├── prisma/                      # Prisma schema + generated SQL migrations
+├── apps/
+│   ├── web/                    # SvelteKit frontend (SSR proxy to Hono API)
+│   │   ├── src/
+│   │   │   ├── lib/components/ # shadcn-svelte UI + feature components
+│   │   │   ├── lib/server/     # SSR proxy (apiFetch) + session resolution
+│   │   │   └── routes/         # SvelteKit pages + server load/actions
+│   │   ├── vite.config.ts      # Tailwind, SvelteKit, Paraglide, Vitest
+│   │   └── components.json     # shadcn-svelte configuration
+│   └── api/                    # Hono.js API (all business logic)
+│       └── src/
+│           ├── routes/         # Hono route handlers (transactions, stats, auth, admin, docs)
+│           ├── middleware/      # Auth, rate-limit middleware
+│           ├── openapi.ts      # OpenAPI 3.1 spec
+│           └── types.ts        # AppEnv type for Hono generics
+├── packages/
+│   ├── db/                     # Prisma schema + migrations + generated client
+│   │   ├── prisma/             # Schema + SQL migrations
+│   │   └── src/                # Client, queries, audit, admin helpers
+│   └── shared/                 # Shared Zod schemas + domain types
+│       └── src/                # Transaction schemas, categories, date, money utils
+├── .agents/skills/             # AI skills (karpathy, shadcn-svelte, hono, prisma, etc.)
+├── .github/workflows/ci.yml    # GitHub Actions: build, lint, check, test via turbo
+├── e2e/                        # Playwright E2E tests (2-app topology)
+├── ai-docs/                    # Task plan + session log for AI collaboration
+├── turbo.json                  # Turborepo pipeline config
+├── pnpm-workspace.yaml         # Workspace definition
+├── package.json                # Root scripts delegating to turbo
+└── prisma.config.ts            # Prisma CLI config (schema path + datasource URL)
+```
+
 ├── e2e/
-│   ├── expense.spec.ts          # Playwright login + transaction CRUD happy path
-│   └── sort.spec.ts             # Playwright table-sort + URL-state e2e checks
-├── messages/                    # Paraglide source messages
-│   ├── en.json                  # English UI copy
-│   └── zh-tw.json               # Traditional Chinese UI copy
+│ ├── expense.spec.ts # Playwright login + transaction CRUD happy path
+│ └── sort.spec.ts # Playwright table-sort + URL-state e2e checks
+├── messages/ # Paraglide source messages
+│ ├── en.json # English UI copy
+│ └── zh-tw.json # Traditional Chinese UI copy
 ├── src/
-│   ├── app.d.ts                 # SvelteKit app types (App.Locals.user)
-│   ├── app.html                 # HTML shell with Paraglide lang/dir placeholders
-│   ├── hooks.server.ts          # Session lookup, locale middleware, theme class injection
-│   ├── lib/
-│   │   ├── assets/              # Favicon and README screenshots
-│   │   ├── components/          # CategoryChart, LocaleSwitcher, ThemeToggle, TransactionForm
-│   │   │   └── ui/              # Own Svelte 5 primitives: Button, ConfirmDialog, Field
-│   │   ├── server/
-│   │   │   ├── db/
-│   │   │   │   ├── admin.ts     # Admin-only queries (cross-user stats)
-│   │   │   │   ├── audit.ts     # Audit log queries
-│   │   │   │   ├── index.ts     # Prisma client (pg adapter) using DATABASE_URL
-│   │   │   │   ├── queries.ts   # User-scoped CRUD + dashboard aggregates
-│   │   │   │   ├── schema.ts    # App-level types derived from the generated Prisma client
-│   │   │   │   ├── schema.spec.ts
-│   │   │   │   └── seed.ts      # Demo users and transactions
-│   │   │   ├── auth.ts          # HMAC-signed httpOnly session cookie
-│   │   │   ├── guards.ts        # requireUser protected-route helper
-│   │   │   ├── login.ts         # Password-less email lookup
-│   │   │   ├── session.ts       # Cookie -> database-backed SessionUser resolver
-│   │   │   ├── api.ts           # REST API response wrappers and auth guard
-│   │   │   ├── rate-limit.ts    # In-memory fixed-window limiter (login + API)
-│   │   │   ├── openapi.ts       # Dynamic Zod -> OpenAPI 3.1 generator
-│   │   │   ├── schemas.ts       # Shared Zod definitions (forms + API)
-│   │   │   └── validation.ts    # Action validation, utilizing schemas.ts
-│   │   ├── table/               # TanStack sorting: URL-synced sorted-table store
-│   │   │   └── sorted-table.svelte.ts
-│   │   ├── categories.ts        # Fixed category keys + localized labels
-│   │   ├── constants.ts         # App name, demo email, pageTitle helper
-│   │   ├── date.ts              # YYYY-MM / YYYY-MM-DD helpers
-│   │   ├── index.ts             # lib barrel re-exports
-│   │   ├── money.ts             # TWD integer formatting/parsing
-│   │   ├── theme.svelte.ts      # Client theme store (light / dark / system)
-│   │   ├── theme.ts             # Server-safe theme constants and helpers
-│   │   └── transaction.ts       # Transaction form value types
-│   ├── routes/
-│   │   ├── admin/               # Governance view (admin-only) with cross-user aggregate stats
-│   │   ├── api/                 # REST endpoints
-│   │   │   ├── docs/            # Scalar API reference UI
-│   │   │   ├── openapi.json/    # Dynamically generated OpenAPI 3.1 schema
-│   │   │   ├── stats/           # REST endpoint for dashboard aggregates
-│   │   │   └── transactions/    # REST endpoints for transaction CRUD
-│   │   ├── login/               # Password-less email sign-in page/action + route spec
-│   │   ├── logout/              # Sign-out action
-│   │   ├── transactions/
-│   │   │   ├── [id]/edit/       # Edit form load/action, ownership-checked
-│   │   │   ├── new/             # Create form load/action
-│   │   │   └── +page.*          # List/filter page plus delete action
-│   │   ├── +layout.server.ts    # Auth guard and user data for all pages
-│   │   ├── +layout.svelte       # App shell, nav, locale/theme controls, logout form
-│   │   ├── +page.server.ts      # Dashboard monthly stats loader
-│   │   ├── +page.svelte         # Dashboard UI and pure-CSS category chart
-│   │   └── layout.css           # Tailwind v4 import and global styles
-│   └── *.spec.ts                # Unit/integration specs colocated with source modules
+│ ├── app.d.ts # SvelteKit app types (App.Locals.user)
+│ ├── app.html # HTML shell with Paraglide lang/dir placeholders
+│ ├── hooks.server.ts # Session lookup, locale middleware, theme class injection
+│ ├── lib/
+│ │ ├── assets/ # Favicon and README screenshots
+│ │ ├── components/ # CategoryChart, LocaleSwitcher, ThemeToggle, TransactionForm
+│ │ │ └── ui/ # Own Svelte 5 primitives: Button, ConfirmDialog, Field
+│ │ ├── server/
+│ │ │ ├── db/
+│ │ │ │ ├── admin.ts # Admin-only queries (cross-user stats)
+│ │ │ │ ├── audit.ts # Audit log queries
+│ │ │ │ ├── index.ts # Prisma client (pg adapter) using DATABASE*URL
+│ │ │ │ ├── queries.ts # User-scoped CRUD + dashboard aggregates
+│ │ │ │ ├── schema.ts # App-level types derived from the generated Prisma client
+│ │ │ │ ├── schema.spec.ts
+│ │ │ │ └── seed.ts # Demo users and transactions
+│ │ │ ├── auth.ts # HMAC-signed httpOnly session cookie
+│ │ │ ├── guards.ts # requireUser protected-route helper
+│ │ │ ├── login.ts # Password-less email lookup
+│ │ │ ├── session.ts # Cookie -> database-backed SessionUser resolver
+│ │ │ ├── api.ts # REST API response wrappers and auth guard
+│ │ │ ├── rate-limit.ts # In-memory fixed-window limiter (login + API)
+│ │ │ ├── openapi.ts # Dynamic Zod -> OpenAPI 3.1 generator
+│ │ │ ├── schemas.ts # Shared Zod definitions (forms + API)
+│ │ │ └── validation.ts # Action validation, utilizing schemas.ts
+│ │ ├── table/ # TanStack sorting: URL-synced sorted-table store
+│ │ │ └── sorted-table.svelte.ts
+│ │ ├── categories.ts # Fixed category keys + localized labels
+│ │ ├── constants.ts # App name, demo email, pageTitle helper
+│ │ ├── date.ts # YYYY-MM / YYYY-MM-DD helpers
+│ │ ├── index.ts # lib barrel re-exports
+│ │ ├── money.ts # TWD integer formatting/parsing
+│ │ ├── theme.svelte.ts # Client theme store (light / dark / system)
+│ │ ├── theme.ts # Server-safe theme constants and helpers
+│ │ └── transaction.ts # Transaction form value types
+│ ├── routes/
+│ │ ├── admin/ # Governance view (admin-only) with cross-user aggregate stats
+│ │ ├── api/ # REST endpoints
+│ │ │ ├── docs/ # Scalar API reference UI
+│ │ │ ├── openapi.json/ # Dynamically generated OpenAPI 3.1 schema
+│ │ │ ├── stats/ # REST endpoint for dashboard aggregates
+│ │ │ └── transactions/ # REST endpoints for transaction CRUD
+│ │ ├── login/ # Password-less email sign-in page/action + route spec
+│ │ ├── logout/ # Sign-out action
+│ │ ├── transactions/
+│ │ │ ├── [id]/edit/ # Edit form load/action, ownership-checked
+│ │ │ ├── new/ # Create form load/action
+│ │ │ └── +page.* # List/filter page plus delete action
+│ │ ├── +layout.server.ts # Auth guard and user data for all pages
+│ │ ├── +layout.svelte # App shell, nav, locale/theme controls, logout form
+│ │ ├── +page.server.ts # Dashboard monthly stats loader
+│ │ ├── +page.svelte # Dashboard UI and pure-CSS category chart
+│ │ └── layout.css # Tailwind v4 import and global styles
+│ └── \_.spec.ts # Unit/integration specs colocated with source modules
 ├── static/
-│   ├── robots.txt               # Crawl rules + sitemap directive
-│   └── sitemap.xml              # Public sitemap for search engines
-├── .env.example                 # DATABASE_URL + SESSION_SECRET template
-├── .mcp.json                    # Svelte MCP server registration
-├── .npmrc                       # pnpm/node package manager settings
-├── .oxfmtrc.json                # oxfmt formatter config
-├── .oxlintrc.json               # oxlint JS/TS lint rules
-├── AGENTS.md                    # AI agent instructions for this repo
-├── LICENSE                      # MIT license
-├── README.md                    # English README
-├── README-cht.md                # Traditional Chinese README
-├── commitlint.config.mjs        # Conventional commit config
-├── compose.yaml                 # Local PostgreSQL service
-├── prisma.config.ts             # Prisma CLI config (schema path + datasource URL)
-├── eslint.config.js             # ESLint config for Svelte files
-├── package.json                 # Scripts, dependencies, lint-staged, engines
-├── playwright.config.ts         # Cross-browser e2e configuration
-├── pnpm-lock.yaml               # Locked dependency graph
-├── pnpm-workspace.yaml          # pnpm workspace and minimum-release-age policy
-├── project.inlang/              # Paraglide / inlang i18n project settings
-├── skills-lock.json             # Locked AI skill/plugin metadata
-├── sonar-project.properties     # SonarQube project configuration
-├── svelte.config.js             # SvelteKit config, Vercel adapter, forced runes mode
-├── tsconfig.json                # TypeScript config extending generated SvelteKit config
-└── vite.config.ts               # Vite plugins: Tailwind, SvelteKit, Paraglide; Vitest config
+│ ├── robots.txt # Crawl rules + sitemap directive
+│ └── sitemap.xml # Public sitemap for search engines
+├── .env.example # DATABASE_URL + SESSION_SECRET template
+├── .mcp.json # Svelte MCP server registration
+├── .npmrc # pnpm/node package manager settings
+├── .oxfmtrc.json # oxfmt formatter config
+├── .oxlintrc.json # oxlint JS/TS lint rules
+├── AGENTS.md # AI agent instructions for this repo
+├── LICENSE # MIT license
+├── README.md # English README
+├── README-cht.md # Traditional Chinese README
+├── commitlint.config.mjs # Conventional commit config
+├── compose.yaml # Local PostgreSQL service
+├── prisma.config.ts # Prisma CLI config (schema path + datasource URL)
+├── eslint.config.js # ESLint config for Svelte files
+├── package.json # Scripts, dependencies, lint-staged, engines
+├── playwright.config.ts # Cross-browser e2e configuration
+├── pnpm-lock.yaml # Locked dependency graph
+├── pnpm-workspace.yaml # pnpm workspace and minimum-release-age policy
+├── project.inlang/ # Paraglide / inlang i18n project settings
+├── skills-lock.json # Locked AI skill/plugin metadata
+├── sonar-project.properties # SonarQube project configuration
+├── svelte.config.js # SvelteKit config, Vercel adapter, forced runes mode
+├── tsconfig.json # TypeScript config extending generated SvelteKit config
+└── vite.config.ts # Vite plugins: Tailwind, SvelteKit, Paraglide; Vitest config
+
 ```
 
 ---
@@ -444,3 +452,4 @@ This project continuously evaluates emerging tools and adopts them based on meas
 | **Data**     | Seeded demo data; demo accounts shared by visitors, but each account's data stays isolated | Real user accounts with sign-up     |
 
 The demo deployment uses free-tier infrastructure to minimize costs. Production deployments should implement proper regional optimization and real user onboarding.
+```
