@@ -19,7 +19,9 @@
 </script>
 
 <Select.Root type="single" {value} onValueChange={handleChange}>
-  <Select.Trigger class="h-8 w-auto px-2 text-sm" aria-label={m.locale_label()} />
+  <Select.Trigger class="h-8 w-auto px-2 text-sm" aria-label={m.locale_label()}>
+    {labels[value]}
+  </Select.Trigger>
   <Select.Content>
     <Select.Group>
       {#each locales as locale (locale)}

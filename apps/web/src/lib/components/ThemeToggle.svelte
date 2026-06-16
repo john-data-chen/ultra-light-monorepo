@@ -18,7 +18,9 @@
 </script>
 
 <Select.Root type="single" value={theme.preference} onValueChange={handleChange}>
-  <Select.Trigger class="h-8 w-auto px-2 text-sm" aria-label={m.theme_label()} />
+  <Select.Trigger class="h-8 w-auto px-2 text-sm" aria-label={m.theme_label()}>
+    {labels[theme.preference]}
+  </Select.Trigger>
   <Select.Content>
     <Select.Group>
       {#each THEME_ORDER as option (option)}
