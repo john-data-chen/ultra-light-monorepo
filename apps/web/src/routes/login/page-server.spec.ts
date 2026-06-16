@@ -67,6 +67,7 @@ describe("login action", () => {
   it("returns a form failure when no account exists", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: false,
+      status: 400,
       json: async () => ({ message: "User not found" })
     } as Response);
 
