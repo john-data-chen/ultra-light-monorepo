@@ -92,7 +92,7 @@ transactions.post("/", rateLimitMiddleware({ windowMs: 60 * 1000, max: 100 }), a
     "create",
     "transaction",
     transaction.id,
-    `${transaction.type} in ${transaction.category} for ${transaction.amount}`
+    `${transaction.type} ${transaction.category} ${transaction.amount}`
   );
 
   return c.json(serializeTransaction(transaction), 201);
@@ -158,7 +158,7 @@ transactions.patch("/:id", rateLimitMiddleware({ windowMs: 60 * 1000, max: 100 }
     "update",
     "transaction",
     id,
-    `${updated.type} in ${updated.category} for ${updated.amount}`
+    `${updated.type} ${updated.category} ${updated.amount}`
   );
 
   return c.json(serializeTransaction(updated));
@@ -176,7 +176,13 @@ transactions.delete("/:id", rateLimitMiddleware({ windowMs: 60 * 1000, max: 100 
     return c.json({ message: "Transaction not found" }, 404);
   }
 
-  await recordAudit(user.id, "delete", "transaction", id, null);
+  await recordAudit(
+    user.id,
+    "delete",
+    "transaction",
+    id,
+    `${deleted.type} ${deleted.category} ${deleted.amount}`
+  );
 
   return c.body(null, 204);
 });

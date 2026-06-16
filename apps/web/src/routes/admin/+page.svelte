@@ -74,24 +74,37 @@
       const typeStr = isIncome ? "income" : "expense";
       const rest = summary.slice(typeStr.length + 1);
 
-      const lastSpace = rest.lastIndexOf(" ");
-      if (lastSpace !== -1) {
-        const cat = rest.slice(0, lastSpace);
-        const amt = rest.slice(lastSpace + 1);
+      let cat: string;
+      let amt: string;
 
-        const catLabel = categoryLabel(cat);
-        const tType = isIncome ? m.type_income() : m.type_expense();
-        const num = Number(amt);
-        const fAmt = Number.isNaN(num) ? `NT$${amt}` : formatTWD(num);
-        const sign = isIncome ? "+" : "-";
-
-        const text =
-          getLocale() === "zh-tw"
-            ? `${catLabel}${tType} ${sign} ${fAmt}`
-            : `${catLabel} ${tType} ${sign} ${fAmt}`;
-
-        return { text, isIncome };
+      // Legacy format: "in {category} for {amount}" (old DB rows)
+      const inIdx = rest.indexOf("in ");
+      const forIdx = rest.lastIndexOf(" for ");
+      if (inIdx === 0 && forIdx > 0) {
+        cat = rest.slice(3, forIdx);
+        amt = rest.slice(forIdx + 5);
+      } else {
+        // New format: "{category} {amount}" — last token is amount
+        const lastSpace = rest.lastIndexOf(" ");
+        if (lastSpace === -1) {
+          return { text: summary, isIncome: null };
+        }
+        cat = rest.slice(0, lastSpace);
+        amt = rest.slice(lastSpace + 1);
       }
+
+      const num = Number(amt);
+      const catLabel = categoryLabel(cat);
+      const tType = isIncome ? m.type_income() : m.type_expense();
+      const fAmt = Number.isNaN(num) ? `NT$${amt}` : formatTWD(num);
+      const sign = isIncome ? "+" : "-";
+
+      const text =
+        getLocale() === "zh-tw"
+          ? `${catLabel}${tType} ${sign} ${fAmt}`
+          : `${catLabel} ${tType} ${sign} ${fAmt}`;
+
+      return { text, isIncome };
     }
     return { text: summary, isIncome: null };
   }
