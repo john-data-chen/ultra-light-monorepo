@@ -32,8 +32,17 @@ export const actions: Actions = {
       });
 
       if (!response.ok) {
+        // Surface the real failure instead of flattening every non-2xx into a 400.
+        // 401 = no account for that email; 5xx (or a non-JSON platform error page such
+        // as a Vercel 404) = the API is unreachable/misconfigured -> service unavailable.
+        if (response.status === 401) {
+          return fail(401, { email, message: m.login_error_no_account() });
+        }
+        if (response.status >= 500 || response.status === 404) {
+          return fail(503, { email, message: m.login_error_service_unavailable() });
+        }
         const error = await response.json().catch(() => ({ message: "Login failed" }));
-        return fail(400, { email, message: error.message });
+        return fail(response.status, { email, message: error.message });
       }
 
       const setCookieHeader = response.headers.get("set-cookie");
