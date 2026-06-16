@@ -10,7 +10,7 @@
     "db:generate": "turbo run db:generate",
     "db:migrate": "pnpm --filter @ultra-light/db run db:migrate",
     "db:push": "pnpm --filter @ultra-light/db run db:push",
-    "db:seed": "tsx --env-file=.env packages/db/src/seed.ts",
+    "db:seed": "pnpm --filter @ultra-light/db run db:seed",
     "db:start": "docker compose up",
     "db:studio": "pnpm --filter @ultra-light/db run db:studio",
     "dev": "turbo run dev",

@@ -40,6 +40,6 @@
     "coverage",
     "static",
     "pnpm-lock.yaml",
-    "src/lib/server/db/generated"
+    "packages/db/src/generated"
   ]
 }
