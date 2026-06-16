@@ -1,5 +1,0 @@
-# allow crawling everything by default
-User-agent: *
-Disallow:
-
-Sitemap: https://sveltekit-starter-kit.vercel.app/sitemap.xml
