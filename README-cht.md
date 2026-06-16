@@ -15,12 +15,12 @@
 
 <table>
   <tr>
-    <td align="center"><img src="./src/lib/assets/screenshots/login.png" alt="免密碼 email 登入畫面，已預填 demo account" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/dashboard.png" alt="Dashboard 顯示月收入、支出、結餘與純 CSS 類別 donut chart" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/transactions.png" alt="交易紀錄清單，包含類別與月份篩選，以及編輯與刪除操作" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/add-new-record.png" alt="新增交易表單，包含類型、類別、金額、日期與備註欄位" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/admin.png" alt="管理員 Governance 介面：逐使用者交易筆數、所有成員的總收入與支出，以及近期活動稽核軌跡" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/api-docs.png" alt="Expense Tracker API 的 Scalar UI：OpenAPI 3.1 規範，含 cookie 驗證、client libraries 與 List transactions endpoint" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/login.png" alt="免密碼 email 登入畫面，已預填 demo account" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/dashboard.png" alt="Dashboard 顯示月收入、支出、結餘與純 CSS 類別 donut chart" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/transactions.png" alt="交易紀錄清單，包含類別與月份篩選，以及編輯與刪除操作" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/add-new-record.png" alt="新增交易表單，包含類型、類別、金額、日期與備註欄位" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/admin.png" alt="管理員 Governance 介面：逐使用者交易筆數、所有成員的總收入與支出，以及近期活動稽核軌跡" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/api-docs.png" alt="Expense Tracker API 的 Scalar UI：OpenAPI 3.1 規範，含 cookie 驗證、client libraries 與 List transactions endpoint" width="140"></td>
   </tr>
   <tr>
     <td align="center"><b>登入畫面</b></td>
@@ -46,7 +46,7 @@
 
 ## 生產環境 Lighthouse 儀表板審查
 
-<img src="./src/lib/assets/screenshots/dashboard-lighthouse-score.png" alt="儀表板 Lighthouse 審查：全部 90+ 項得分" width="460">
+<img src="./apps/web/src/lib/assets/screenshots/dashboard-lighthouse-score.png" alt="儀表板 Lighthouse 審查：全部 90+ 項得分" width="460">
 
 ---
 

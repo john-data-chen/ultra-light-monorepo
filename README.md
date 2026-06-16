@@ -16,12 +16,12 @@ Built as a **Turborepo monorepo** with a standalone **Hono.js API** backend and 
 
 <table>
   <tr>
-    <td align="center"><img src="./src/lib/assets/screenshots/login.png" alt="Passwordless email login screen, pre-filled with a demo account" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/dashboard.png" alt="Dashboard showing monthly income, expense, balance and a pure-CSS category donut chart" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/transactions.png" alt="Transaction list with category and month filters, plus edit and delete actions" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/add-new-record.png" alt="New transaction form with type, category, amount, date and optional note fields" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/admin.png" alt="Admin Governance view: per-user transaction counts, total income and expense across all members, plus a recent-activity audit trail" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/api-docs.png" alt="Scalar UI for the Expense Tracker API: OpenAPI 3.1 spec with cookie auth, client libraries, and the List transactions endpoint" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/login.png" alt="Passwordless email login screen, pre-filled with a demo account" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/dashboard.png" alt="Dashboard showing monthly income, expense, balance and a pure-CSS category donut chart" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/transactions.png" alt="Transaction list with category and month filters, plus edit and delete actions" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/add-new-record.png" alt="New transaction form with type, category, amount, date and optional note fields" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/admin.png" alt="Admin Governance view: per-user transaction counts, total income and expense across all members, plus a recent-activity audit trail" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/api-docs.png" alt="Scalar UI for the Expense Tracker API: OpenAPI 3.1 spec with cookie auth, client libraries, and the List transactions endpoint" width="140"></td>
   </tr>
   <tr>
     <td align="center"><b>Login</b></td>
@@ -47,7 +47,7 @@ Built as a **Turborepo monorepo** with a standalone **Hono.js API** backend and 
 
 ## Production Lighthouse audit of the dashboard
 
-<img src="./src/lib/assets/screenshots/dashboard-lighthouse-score.png" alt="Lighthouse audit of the dashboard: all 90+ scores" width="460">
+<img src="./apps/web/src/lib/assets/screenshots/dashboard-lighthouse-score.png" alt="Lighthouse audit of the dashboard: all 90+ scores" width="460">
 
 ---
 
