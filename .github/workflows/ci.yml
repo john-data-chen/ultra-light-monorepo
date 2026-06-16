@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI
 
 on:
   push:
@@ -26,8 +26,6 @@ jobs:
 
       - name: Install dependencies
         env:
-          # postinstall runs `prisma generate`, which only needs a resolvable
-          # DATABASE_URL to load prisma.config.ts — it never connects to the DB.
           DATABASE_URL: "postgresql://placeholder:placeholder@localhost:5432/placeholder"
         run: pnpm install --frozen-lockfile
 
@@ -35,15 +33,4 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
-        run: pnpm test:coverage
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          slug: john-data-chen/sveltekit-starter-kit
-
-      - name: Official SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v6
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: pnpm test
