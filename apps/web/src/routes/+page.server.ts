@@ -5,7 +5,7 @@ import { requireUser } from "$lib/server/session";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals, url, cookies }) => {
-  const user = requireUser(locals);
+  const _user = requireUser(locals);
 
   const monthParam = url.searchParams.get("month");
   const month = monthParam && isValidMonth(monthParam) ? monthParam : currentMonth();

@@ -15,7 +15,7 @@ const transactionSchema = z.object({
 });
 
 export const load: PageServerLoad = async ({ locals, params, cookies }) => {
-  const user = requireUser(locals);
+  const _user = requireUser(locals);
 
   const id = Number(params.id);
   if (!Number.isInteger(id)) {
@@ -42,7 +42,7 @@ export const load: PageServerLoad = async ({ locals, params, cookies }) => {
 
 export const actions: Actions = {
   default: async ({ request, locals, params, cookies }) => {
-    const user = requireUser(locals);
+    const _user = requireUser(locals);
 
     const id = Number(params.id);
     if (!Number.isInteger(id)) {

@@ -21,7 +21,7 @@ export const load: PageServerLoad = ({ locals }) => {
 
 export const actions: Actions = {
   default: async ({ request, locals, cookies }) => {
-    const user = requireUser(locals);
+    const _user = requireUser(locals);
 
     const formData = await request.formData();
     const data = {

@@ -6,7 +6,7 @@ import { requireUser } from "$lib/server/session";
 import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ locals, url, cookies }) => {
-  const user = requireUser(locals);
+  const _user = requireUser(locals);
 
   const categoryParam = url.searchParams.get("category") ?? "";
   const monthParam = url.searchParams.get("month") ?? "";
@@ -44,7 +44,7 @@ export const load: PageServerLoad = async ({ locals, url, cookies }) => {
 
 export const actions: Actions = {
   delete: async ({ request, locals, cookies }) => {
-    const user = requireUser(locals);
+    const _user = requireUser(locals);
 
     const form = await request.formData();
     const id = Number(form.get("id"));
