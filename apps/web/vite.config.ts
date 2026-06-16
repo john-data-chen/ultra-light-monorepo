@@ -4,6 +4,8 @@ import tailwindcss from "@tailwindcss/vite";
 import { svelteTesting } from "@testing-library/svelte/vite";
 import { defineConfig } from "vitest/config";
 
+import sharedConfig from "../../vitest.shared.ts";
+
 export default defineConfig({
   plugins: [
     tailwindcss(),
@@ -33,8 +35,7 @@ export default defineConfig({
   },
   test: {
     coverage: {
-      provider: "v8",
-      reporter: ["text", "json", "html", "lcov"],
+      ...sharedConfig.test?.coverage,
       include: ["src/**/*.{js,ts,svelte}"],
       exclude: [
         "src/lib/paraglide/**",
@@ -51,13 +52,7 @@ export default defineConfig({
         "src/lib/money.ts",
         "src/lib/index.ts",
         "src/lib/transaction.ts"
-      ],
-      thresholds: {
-        statements: 80,
-        branches: 60,
-        functions: 80,
-        lines: 80
-      }
+      ]
     },
     projects: [
       {

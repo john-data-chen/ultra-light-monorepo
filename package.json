@@ -19,7 +19,7 @@
     "postinstall": "echo 'Run pnpm run db:generate manually after setting DATABASE_URL'",
     "prepare": "husky || echo ''",
     "test": "turbo run test",
-    "test:coverage": "turbo run test:coverage",
+    "test:coverage": "turbo run test:coverage --filter=./apps/*",
     "test:e2e": "playwright test",
     "test:watch": "turbo run test -- --watch"
   },
@@ -30,6 +30,7 @@
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.61.0",
     "@ultra-light/db": "workspace:*",
+    "@vitest/coverage-v8": "4.1.9",
     "commitizen": "^4.3.2",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
@@ -42,7 +43,8 @@
     "oxlint": "^1.70.0",
     "tsx": "4.22.4",
     "turbo": "^2.9.18",
-    "typescript-eslint": "^8.61.1"
+    "typescript-eslint": "^8.61.1",
+    "vitest": "^4.1.9"
   },
   "lint-staged": {
     "*.{js,mjs,cjs,ts}": [
