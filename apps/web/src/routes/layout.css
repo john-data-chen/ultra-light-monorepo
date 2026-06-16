@@ -2,6 +2,12 @@
 @import "tw-animate-css";
 @import "shadcn-svelte/tailwind.css";
 
+/* The shared UI library (shadcn-svelte components) lives outside apps/web, so Tailwind v4's
+   automatic source detection (rooted at apps/web) never scans it. Without this, utility classes
+   used only by @ultra-light/ui components (e.g. the AlertDialog's `fixed top-1/2 …` positioning)
+   are not generated and those components render unstyled. */
+@source "../../../../packages/ui/src";
+
 /* Manual dark mode: `dark:` variants key off a `.dark` class on <html>,
    set by the SSR hook + the inline bootstrap script in app.html. */
 @custom-variant dark (&:where(.dark, .dark *));

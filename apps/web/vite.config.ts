@@ -16,7 +16,6 @@ export default defineConfig({
     })
   ],
   test: {
-    expect: { requireAssertions: true },
     coverage: {
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],
@@ -50,6 +49,11 @@ export default defineConfig({
         test: {
           name: "server",
           environment: "node",
+          // requireAssertions guards against tests that forget to assert. It is enforced only
+          // here (node env): in the jsdom "client" project the vitest 4.1.9 + projects toolchain
+          // fails to share the assertion counter with the worker, so every client test counts 0
+          // assertions (100% false positive). Enforcing it there would fail correct tests.
+          expect: { requireAssertions: true },
           include: ["src/**/*.{test,spec}.{js,ts}"],
           exclude: ["src/**/*.svelte.{test,spec}.{js,ts}"]
         }
