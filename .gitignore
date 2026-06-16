@@ -6,6 +6,7 @@ node_modules
 .netlify
 .wrangler
 /.svelte-kit
+**/.svelte-kit
 /build
 
 # OS
@@ -28,6 +29,9 @@ playwright/.cache
 # Vitest
 coverage
 
+# Turborepo
+.turbo
+
 # AI
 
 .antigravitycli
@@ -40,9 +44,11 @@ session-handoff
 
 # Paraglide (generated)
 src/lib/paraglide
+apps/web/src/lib/paraglide
 
 # Prisma (generated)
 src/lib/server/db/generated
+packages/db/src/generated
 
 # pnpm
 .pnpm-store
