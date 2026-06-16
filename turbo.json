@@ -1,0 +1,33 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": [".env"],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".svelte-kit/output", "dist", ".next"]
+    },
+    "@ultra-light/db#build": {
+      "dependsOn": ["db:generate", "^build"],
+      "outputs": [".svelte-kit/output", "dist", ".next"]
+    },
+    "check": {
+      "dependsOn": ["^build"]
+    },
+    "db:generate": {
+      "cache": false,
+      "outputs": ["src/generated/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {},
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "test:coverage": {
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"]
+    }
+  }
+}

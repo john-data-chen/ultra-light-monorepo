@@ -73,10 +73,19 @@
     "typescript/use-unknown-in-catch-callback-variable": "warn"
   },
   "ignorePatterns": [
-    "node_modules/",
-    "static",
-    ".agents",
-    "coverage",
-    "src/lib/server/db/generated"
+    "**/node_modules/**",
+    "**/static/**",
+    "**/.agents/**",
+    "**/coverage/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.svelte-kit/**",
+    "**/.vercel/**",
+    "**/.output/**",
+    "**/.turbo/**",
+    "**/test-results/**",
+    "**/playwright-report/**",
+    "**/packages/db/src/generated/**",
+    "**/packages/ui/**"
   ]
 }

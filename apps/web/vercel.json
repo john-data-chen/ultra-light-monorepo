@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://<API_PROD_URL>/api/$1"
+    }
+  ]
+}

@@ -1,14 +1,13 @@
-# SvelteKit: 多人(家庭)共享線上記帳本 | 包含人工智慧輔助工程流程的完整入門套件
+# Ultra Light Monorepo：多使用者線上記帳本 — Hono API + SvelteKit 前端
 
-[![codecov](https://codecov.io/gh/john-data-chen/sveltekit-starter-kit/graph/badge.svg?token=9Mdwd8ibQs)](https://codecov.io/gh/john-data-chen/sveltekit-starter-kit)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_sveltekit-starter-kit&metric=alert_status&token=6c61941d26a0ba1e36bc438f28dba039c8e3700d)](https://sonarcloud.io/summary/new_code?id=john-data-chen_sveltekit-starter-kit)
+[![codecov](https://codecov.io/gh/john-data-chen/ultra-light-monorepo/graph/badge.svg?token=GTgQxmf2hR)](https://codecov.io/gh/john-data-chen/ultra-light-monorepo)
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=john-data-chen_ultra-light-monorepo)](https://sonarcloud.io/summary/new_code?id=john-data-chen_ultra-light-monorepo)
 [![CI](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-這是一個產品級別的 SvelteKit starter kit，以真實可用的多使用者 **線上記帳本** 為核心，所有帳號都可以新增支出、收入，並查看統計資訊。而管理帳號可以看到所有帳號的交易紀錄。
-這展示技術決策、品質工程，以及 AI 輔助開發的實作方式。技術棧包含 Svelte 5（runes mode）、TypeScript、Tailwind CSS v4、Prisma ORM 與 PostgreSQL。
+產品級別的 monorepo 架構，以真實可用的多使用者 **線上記帳本** 為核心。所有帳號都可以新增支出、收入，並查看統計資訊。管理帳號可以看到所有帳號的交易紀錄。
 
-本專案刻意聚焦於產品團隊在意的能力：型別化、模組化的 **TypeScript / Node.js**；有意識的 **API、資料流與 RBAC** 設計；搭配 ORM 驅動 **schema migration** 與執行時驗證的 **PostgreSQL**；**AI 輔助（Harness）工程**；以及具紀律、可驗證的交付。
+採用 **Turborepo monorepo** 架構，包含獨立的 **Hono.js API** 後端與 **SvelteKit** 前端，部署為兩個獨立的 Vercel 專案。UI 使用 **shadcn-svelte** 元件庫搭配 Tailwind CSS v4。
 
 英文版本請見 **[README.md](./README.md)**。
 
@@ -16,12 +15,12 @@
 
 <table>
   <tr>
-    <td align="center"><img src="./src/lib/assets/screenshots/login.png" alt="免密碼 email 登入畫面，已預填 demo account" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/dashboard.png" alt="Dashboard 顯示月收入、支出、結餘與純 CSS 類別 donut chart" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/transactions.png" alt="交易紀錄清單，包含類別與月份篩選，以及編輯與刪除操作" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/add-new-record.png" alt="新增交易表單，包含類型、類別、金額、日期與備註欄位" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/admin.png" alt="管理員 Governance 介面：逐使用者交易筆數、所有成員的總收入與支出，以及近期活動稽核軌跡" width="140"></td>
-    <td align="center"><img src="./src/lib/assets/screenshots/api-docs.png" alt="Expense Tracker API 的 Scalar UI：OpenAPI 3.1 規範，含 cookie 驗證、client libraries 與 List transactions endpoint" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/login.png" alt="免密碼 email 登入畫面，已預填 demo account" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/dashboard.png" alt="Dashboard 顯示月收入、支出、結餘與純 CSS 類別 donut chart" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/transactions.png" alt="交易紀錄清單，包含類別與月份篩選，以及編輯與刪除操作" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/add-new-record.png" alt="新增交易表單，包含類型、類別、金額、日期與備註欄位" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/admin.png" alt="管理員 Governance 介面：逐使用者交易筆數、所有成員的總收入與支出，以及近期活動稽核軌跡" width="140"></td>
+    <td align="center"><img src="./apps/web/src/lib/assets/screenshots/api-docs.png" alt="Expense Tracker API 的 Scalar UI：OpenAPI 3.1 規範，含 cookie 驗證、client libraries 與 List transactions endpoint" width="140"></td>
   </tr>
   <tr>
     <td align="center"><b>登入畫面</b></td>
@@ -47,7 +46,7 @@
 
 ## 生產環境 Lighthouse 儀表板審查
 
-<img src="./src/lib/assets/screenshots/dashboard-lighthouse-score.png" alt="儀表板 Lighthouse 審查：全部 90+ 項得分" width="460">
+<img src="./apps/web/src/lib/assets/screenshots/dashboard-lighthouse-score.png" alt="儀表板 Lighthouse 審查：全部 90+ 項得分" width="460">
 
 ---
 
@@ -55,25 +54,26 @@
 
 ### 架構
 
-評估過引入第三方 UI 元件庫，最終選擇建立內部的 Svelte 5 primitives 層 — 理由：維持極少依賴的原則、無依賴成本的抽象化、符合無障礙標準（a11y-correct）的原生 `<dialog>`，以及利用 Svelte 5 snippets 達到純 HTML 屬性傳遞（不需透過 bind prop-drilling）。
+UI 以 **shadcn-svelte**（Tailwind v4 + bits-ui primitives）建構，並抽取為共用的 `packages/ui` 元件庫，可供任何 app 使用；它被視為 vendored／copy-in 程式碼（排除於 lint、format、coverage 之外）。`apps/web` 從 `@ultra-light/ui` 匯入元件；Tailwind v4 透過 `layout.css` 中的 `@source` 指令掃描 `packages/ui/src`。
 
-| 類型          | 選擇                                           | 理由                                                                                  |
-| ------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------- |
-| Framework     | SvelteKit 2 + Svelte 5（runes）                | 精細的響應性、極簡樣板、SSR + 表單操作                                                |
-| Styling       | Tailwind CSS v4（Vite plugin）                 | 公用優先、零執行時間，透過 v4 Vite plugin 加速建置                                    |
-| Database      | Prisma ORM + PostgreSQL                        | 宣告式 schema 作為唯一真相來源；型別安全的 generated client、內建 migrations          |
-| DB Driver     | `pg`（經 `@prisma/adapter-pg`）                | Prisma v7 driver-adapter 工作流；快速 pooled driver，適合 Vercel Node serverless 服務 |
-| Auth          | Password-less email + signed `httpOnly` cookie | 不儲存密碼；使用最小且清楚的 session model                                            |
-| Authz/RBAC    | 路由層級的權限守衛（`requireAdmin`）           | 基於資料庫使用者角色（`admin` 與 `member`）的嚴格存取控制                             |
-| Rate Limiting | 記憶體內的 fixed-window 限流（登入 + API）     | 簡易的防暴力破解/濫用；生產環境會改用 Vercel KV / Redis                               |
-| Security      | Nonce CSP + HSTS + 強化的回應標頭              | 縱深防禦；僅 Scalar `/api/docs` 放寬 CSP，dev 模式移除 CSP 以支援 Vite HMR            |
-| Validation    | Zod（server-side schemas）                     | 在 form action 邊界做執行時驗證 — 編譯檢查交給 TS，輸入檢查交給 Zod                   |
-| REST API      | 完整的 CRUD API + JSON 回應封裝                | 分離的 REST 層以利外部系統整合或手機端應用呼叫                                        |
-| API Docs      | Scalar UI + Zod 4 原生 OpenAPI 匯出            | 直接由 Zod 模型動態產生的零阻力互動式 API 文件                                        |
-| Tables        | `@tanstack/table-core`                         | Headless，無 UI 依賴，將排序狀態同步至 URL 並且純粹使用 Svelte 元件渲染               |
-| Charts        | Pure CSS donut                                 | 不引入圖表套件，減少打包體積並保留完整控制                                            |
-| i18n          | Paraglide JS（`@inlang/paraglide-js`）         | 類型安全、tree-shakeable 翻譯；支援英文與繁體中文                                     |
-| Deploy        | `@sveltejs/adapter-vercel`（Node serverless）  | `pg` TCP driver 需要 Node runtime                                                     |
+| 類型          | 選擇                                           | 理由                                                                                   |
+| ------------- | ---------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Monorepo      | Turborepo + pnpm workspaces                    | Vercel 原生整合、任務快取/編排、共享 packages                                          |
+| 前端          | SvelteKit 2 + Svelte 5（runes）                | 精細的響應性、SSR + 表單操作、server-side proxy 至 Hono API                            |
+| API           | Hono.js（Node runtime）                        | 輕量快速、支援 `@hono/zod-openapi`、部署為獨立 Vercel 專案                             |
+| Styling       | Tailwind CSS v4 + shadcn-svelte                | 公用優先樣式搭配可組合、無障礙的 UI 元件（bits-ui）                                    |
+| Database      | Prisma ORM + PostgreSQL                        | 宣告式 schema 作為唯一真相來源；型別安全的 generated client，在 `packages/db`          |
+| DB Driver     | `pg`（經 `@prisma/adapter-pg`）                | Prisma v7 driver-adapter 工作流；快速 pooled driver，適合 Vercel Node serverless 服務  |
+| Auth          | Password-less email + signed `httpOnly` cookie | 不儲存密碼；Hono API 為 session 驗證的唯一真相來源                                     |
+| Authz/RBAC    | Hono middleware + SvelteKit hooks              | 基於資料庫使用者角色（`admin` 與 `member`）的嚴格存取控制                              |
+| Rate Limiting | 記憶體內的 fixed-window 限流（Hono API）       | 簡易的防暴力破解/濫用；生產環境會改用 Vercel KV / Redis                                |
+| Security      | Nonce CSP + HSTS + 強化的回應標頭              | 縱深防禦；docs UI 放寬 CSP，dev 模式移除 CSP                                           |
+| Validation    | Zod（`packages/shared` 共享 schemas）          | 在 API 邊界做執行時驗證 — 編譯檢查交給 TS，輸入檢查交給 Zod                            |
+| API Docs      | OpenAPI 3.1 + Scalar UI                        | 由 Hono API 於 `/api/openapi.json` + `/api/docs` 提供                                  |
+| Tables        | `@tanstack/table-core`                         | Headless，排序狀態同步至 URL，純粹使用 Svelte 元件渲染                                 |
+| Charts        | Pure CSS donut                                 | 不引入圖表套件，減少打包體積並保留完整控制                                             |
+| i18n          | Paraglide JS（`@inlang/paraglide-js`）         | 類型安全、tree-shakeable 翻譯；支援英文與繁體中文                                      |
+| Deploy        | 兩個 Vercel 專案（web + api）                  | SvelteKit 使用 `adapter-vercel`，Hono API 使用 `@hono/node-server`；Turborepo 驅動建置 |
 
 ### 品質保證
 
@@ -106,7 +106,7 @@
 | 決策                                                         | 原因                                                                                                                                                                                                                                                                                                             |
 | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 保留 `svelte.config.js`，不將所有設定整合到 `vite.config.ts` | SvelteKit ≥ 2.62.0 可使用 `sveltekit()` 將 `svelte.config.js` 內容整合到 `vite.config.ts`，但 `svelte-check`、`eslint-plugin-svelte` 與 IDE (VS Code..etc) 仍需讀取 `svelte.config.js` 取得強制 runes 設定。新做法必須放棄原先默認的設定，推翻慣例也許會讓其他接手的開發者感到疑惑，權衡利弊後決定使用原先做法。 |
-| 自建 Svelte 5 UI primitives，不用元件庫                      | 更少依賴、更小 bundle、原生 a11y（`<dialog>`/`<select>`）、乾淨的 runes/snippets                                                                                                                                                                                                                                 |
+| 採用 shadcn-svelte 並抽取為 `packages/ui`                    | 可組合、無障礙的 bits-ui primitives；共用元件庫，視為 vendored 程式碼（排除於 lint/format/coverage）                                                                                                                                                                                                             |
 | Vercel Node 用 pooled `pg` TCP driver（非 Edge）             | 可靠連線池、免 proxy、本機 Docker 跑相同 Postgres                                                                                                                                                                                                                                                                |
 | Zod schema = 單一真相來源                                    | 一份 schema → 驗證 + TS 型別 + OpenAPI 3.1；零落差                                                                                                                                                                                                                                                               |
 
@@ -282,8 +282,8 @@ pnpm db:seed       # Seed demo users + sample transactions
   - `*.svelte.spec.ts`: 於 `client`（JSDOM）環境執行。
 - **常用指令**:
   - `pnpm test`: 執行所有 Vitest 單元測試。
-  - `pnpm test:coverage`: 執行測試覆蓋率（門檻 >=80%）。
-  - `pnpm test:e2e`: 執行 Playwright 瀏覽器 E2E 測試。
+  - `pnpm test:coverage`: 執行測試覆蓋率（各套件門檻：`packages/shared` ≥90%；`apps/api`、`apps/web` 因 mock DB 與 bits-ui portal／SSR proxy 程式碼採務實下限；`packages/db` best-effort）。
+  - `pnpm test:e2e`: 執行 Playwright 瀏覽器 E2E 測試（chromium、webkit、mobile chrome/safari）。
 - **元件測試範例**:
   ```ts
   import { render, screen } from "@testing-library/svelte";
@@ -298,107 +298,112 @@ pnpm db:seed       # Seed demo users + sample transactions
 
 ```text
 .
-├── .agents/skills/              # Repo 專用 AI skills，由 AGENTS.md / CLAUDE.md 使用
-│   ├── doc-coauthoring/         # 文件共筆 workflow
-│   ├── prisma-*/                # Prisma ORM 慣例（cli、client-api、database-setup、postgres、driver-adapter）
-│   ├── karpathy-guidelines/     # Surgical change 與驗證紀律
-│   ├── session-handoff/         # (private, 未提交) 維護 ai-docs/tasks.md + session-log.md
-│   ├── svelte-code-writer/      # Svelte MCP/CLI 查詢與 autofix workflow
-│   └── svelte-core-bestpractices/
-├── .codex/                      # Codex AI configuration
-├── .github/workflows/ci.yml     # GitHub Actions：install、test、Codecov、SonarQube
-├── .husky/                      # Git hooks（pre-commit, commit-msg）
-├── .opencode/                   # OpenCode AI configuration
-├── .vscode/                     # VS Code settings + extension recommendations
-├── ai-docs/                     # AI task template、task plan、session log
-├── prisma/                      # Prisma schema + generated SQL migrations
-├── e2e/
-│   ├── expense.spec.ts          # Playwright login + transaction CRUD happy path
-│   └── sort.spec.ts             # Playwright 排序 + URL 狀態 e2e 檢查
-├── messages/                    # Paraglide source messages
-│   ├── en.json                  # 英文翻譯檔
-│   └── zh-tw.json               # 繁體中文翻譯檔
-├── src/
-│   ├── app.d.ts                 # SvelteKit app types（App.Locals.user）
-│   ├── app.html                 # HTML shell，包含 Paraglide lang/dir placeholders
-│   ├── hooks.server.ts          # Session lookup、locale middleware、theme class injection
-│   ├── lib/
-│   │   ├── assets/              # Favicon 與 README screenshots
-│   │   ├── components/          # CategoryChart, LocaleSwitcher, ThemeToggle, TransactionForm
-│   │   │   └── ui/              # 自建 Svelte 5 primitives：Button、ConfirmDialog、Field
-│   │   ├── server/
-│   │   │   ├── db/
-│   │   │   │   ├── admin.ts     # Admin-only 查詢（跨使用者統計資料）
-│   │   │   │   ├── audit.ts     # 稽核日誌查詢
-│   │   │   │   ├── index.ts     # 使用 DATABASE_URL 的 Prisma client（pg adapter）
-│   │   │   │   ├── queries.ts   # User-scoped CRUD + dashboard aggregates
-│   │   │   │   ├── schema.ts    # 由 generated Prisma client 衍生的 app-level 型別
-│   │   │   │   ├── schema.spec.ts
-│   │   │   │   └── seed.ts      # Demo users 與 transactions
-│   │   │   ├── auth.ts          # HMAC-signed httpOnly session cookie
-│   │   │   ├── guards.ts        # requireUser protected-route helper
-│   │   │   ├── login.ts         # Password-less email lookup
-│   │   │   ├── session.ts       # Cookie -> database-backed SessionUser resolver
-│   │   │   ├── api.ts           # REST API 回應包裝與身分驗證守衛
-│   │   │   ├── rate-limit.ts    # 記憶體內 fixed-window 限流（登入 + API）
-│   │   │   ├── openapi.ts       # 動態從 Zod 產生 OpenAPI 3.1 規範
-│   │   │   ├── schemas.ts       # 共用的 Zod 定義 (表單與 API 共用)
-│   │   │   └── validation.ts    # Action 驗證邏輯，底層依賴 schemas.ts
-│   │   ├── table/               # TanStack 排序：與 URL 同步的 sorted-table store
-│   │   │   └── sorted-table.svelte.ts
-│   │   ├── categories.ts        # 固定 category keys + localized labels
-│   │   ├── constants.ts         # App name、demo email、pageTitle helper
-│   │   ├── date.ts              # YYYY-MM / YYYY-MM-DD helpers
-│   │   ├── index.ts             # lib barrel re-exports
-│   │   ├── money.ts             # TWD integer formatting/parsing
-│   │   ├── theme.svelte.ts      # Client theme store（light / dark / system）
-│   │   ├── theme.ts             # Server-safe theme constants and helpers
-│   │   └── transaction.ts       # Transaction form value types
-│   ├── routes/
-│   │   ├── admin/               # 管理員專用的 Governance 介面，顯示所有使用者的統計摘要
-│   │   ├── api/                 # REST endpoints
-│   │   │   ├── docs/            # Scalar API 參考文件 UI
-│   │   │   ├── openapi.json/    # 動態產生的 OpenAPI 3.1 規範
-│   │   │   ├── stats/           # 供儀表板使用的彙總 REST endpoint
-│   │   │   └── transactions/    # 用於交易紀錄 CRUD 的 REST endpoints
-│   │   ├── login/               # Password-less email sign-in page/action + route spec
-│   │   ├── logout/              # Sign-out action
-│   │   ├── transactions/
-│   │   │   ├── [id]/edit/       # Edit form load/action，含 ownership check
-│   │   │   ├── new/             # Create form load/action
-│   │   │   └── +page.*          # List/filter page + delete action
-│   │   ├── +layout.server.ts    # Auth guard 與所有頁面的 user data
-│   │   ├── +layout.svelte       # App shell、nav、locale/theme controls、logout form
-│   │   ├── +page.server.ts      # Dashboard monthly stats loader
-│   │   ├── +page.svelte         # Dashboard UI 與 pure-CSS category chart
-│   │   └── layout.css           # Tailwind v4 import 與 global styles
-│   └── *.spec.ts                # 與 source modules colocated 的 unit/integration specs
-├── static/
-│   ├── robots.txt               # 爬蟲規則 + sitemap 指令
-│   └── sitemap.xml              # 供搜尋引擎使用的公開 sitemap
-├── .env.example                 # DATABASE_URL + SESSION_SECRET template
-├── .mcp.json                    # Svelte MCP server registration
-├── .npmrc                       # pnpm/node package manager settings
-├── .oxfmtrc.json                # oxfmt formatter config
-├── .oxlintrc.json               # oxlint JS/TS lint rules
-├── AGENTS.md                    # 此 repo 的 AI agent instructions
-├── LICENSE                      # MIT license
-├── README.md                    # English README
-├── README-cht.md                # 繁體中文 README
-├── commitlint.config.mjs        # Conventional commit config
-├── compose.yaml                 # Local PostgreSQL service
-├── prisma.config.ts             # Prisma CLI config（schema 路徑 + datasource URL）
-├── eslint.config.js             # Svelte files 的 ESLint config
-├── package.json                 # Scripts、dependencies、lint-staged、engines
-├── playwright.config.ts         # Cross-browser e2e configuration
-├── pnpm-lock.yaml               # Locked dependency graph
-├── pnpm-workspace.yaml          # pnpm workspace 與 minimum-release-age policy
-├── project.inlang/              # Paraglide / inlang i18n 專案設定
-├── skills-lock.json             # Locked AI skill/plugin metadata
-├── sonar-project.properties     # SonarQube project configuration
-├── svelte.config.js             # SvelteKit config、Vercel adapter、forced runes mode
-├── tsconfig.json                # TypeScript config，extends generated SvelteKit config
-└── vite.config.ts               # Vite plugins：Tailwind、SvelteKit、Paraglide；Vitest config
+├── apps/
+│   ├── web/                          # SvelteKit 前端（SSR proxy 到 Hono API）
+│   │   ├── src/
+│   │   │   ├── app.d.ts              # SvelteKit 環境型別宣告
+│   │   │   ├── app.html              # HTML shell 模板
+│   │   │   ├── hooks.server.ts       # SvelteKit server hooks（CSP nonce、session、HSTS）
+│   │   │   ├── lib/
+│   │   │   │   ├── components/       # 功能元件
+│   │   │   │   │   ├── CategoryChart.svelte    # 純 CSS donut 圓環圖
+│   │   │   │   │   ├── LocaleSwitcher.svelte   # i18n 語言切換器
+│   │   │   │   │   ├── ThemeToggle.svelte      # 淺色/深色/系統主題切換器
+│   │   │   │   │   └── TransactionForm.svelte  # 新增/編輯交易表單
+│   │   │   │   ├── server/           # 僅限伺服器端使用的 helpers
+│   │   │   │   │   ├── api.ts        # apiFetch() — SSR proxy 至 Hono API
+│   │   │   │   │   ├── auth.ts       # requireAuth 守衛
+│   │   │   │   │   └── session.ts    # Session cookie 讀寫
+│   │   │   │   ├── table/            # TanStack Table 工具
+│   │   │   │   │   ├── sort.ts       # URL 同步排序 helpers
+│   │   │   │   │   └── sorted-table.svelte.ts  # Headless 排序表格 rune
+│   │   │   │   ├── paraglide/        # Paraglide i18n 生成的 runtime
+│   │   │   │   ├── categories.ts     # 客戶端 category 標籤解析
+│   │   │   │   ├── theme.svelte.ts   # 主題 rune（淺色/深色/系統）
+│   │   │   │   └── money.ts          # TWD 格式化 helpers
+│   │   │   └── routes/               # SvelteKit 頁面 + server load/actions
+│   │   │       ├── +layout.svelte    # 根 layout（analytics、theme、nav）
+│   │   │       ├── +layout.server.ts # 根 layout server load（session 守衛）
+│   │   │       ├── +page.svelte      # 儀表板（統計 + donut 圖）
+│   │   │       ├── +page.server.ts   # 儀表板資料載入
+│   │   │       ├── layout.css        # 全域樣式 + Tailwind @source
+│   │   │       ├── login/            # 免密碼 email 登入頁
+│   │   │       ├── logout/           # 登出 action
+│   │   │       ├── transactions/     # 交易清單 + CRUD 頁面
+│   │   │       └── admin/            # 管理員治理介面（僅限 admin）
+│   │   ├── vite.config.ts            # Tailwind、SvelteKit、Paraglide、Vitest
+│   │   └── components.json           # shadcn-svelte 設定
+│   └── api/                          # Hono.js API（所有商業邏輯）
+│       └── src/
+│           ├── routes/               # 路由處理
+│           │   ├── transactions.ts   # CRUD + 分頁
+│           │   ├── stats.ts          # 月度統計聚合
+│           │   ├── auth.ts           # /api/auth（session 驗證）
+│           │   ├── login.ts          # /api/login（免密碼 email）
+│           │   ├── admin.ts          # /api/admin（僅限管理員治理）
+│           │   └── docs.ts           # /api/docs（Scalar UI 掛載）
+│           ├── middleware/
+│           │   ├── auth.ts           # Cookie session 驗證 middleware
+│           │   └── rate-limit.ts     # 記憶體內 fixed-window 限流
+│           ├── openapi.ts            # OpenAPI 3.1 規範定義
+│           ├── index.ts              # App 進入點（掛載路由、@hono/node-server）
+│           └── types.ts              # Hono generics 用的 AppEnv 型別
+├── packages/
+│   ├── db/                           # Prisma schema + migrations + generated client
+│   │   ├── prisma/
+│   │   │   ├── schema.prisma         # Prisma schema（User、Transaction、AuditLog）
+│   │   │   └── migrations/           # SQL migration 歷史
+│   │   └── src/
+│   │       ├── client.ts             # PrismaClient 單例（pg driver adapter）
+│   │       ├── queries.ts            # 型別安全的查詢 helpers（transactions、stats）
+│   │       ├── audit.ts              # 稽核日誌寫入 helpers
+│   │       ├── admin.ts              # 管理員聚合查詢
+│   │       ├── schema.ts             # Prisma schema 重新匯出 / 型別 helpers
+│   │       ├── seed.ts               # Demo 使用者 + 範例交易資料
+│   │       └── generated/            # Prisma 生成的 client（git-ignored）
+│   ├── shared/                       # 共用 Zod schemas + 領域型別
+│   │   └── src/
+│   │       ├── schemas.ts            # Zod 請求/回應 schemas
+│   │       ├── categories.ts         # Category 鍵值 + metadata
+│   │       ├── transaction.ts        # Transaction 領域型別
+│   │       ├── types.ts              # 共用 TS 型別（Role 等）
+│   │       ├── constants.ts          # 全域常數
+│   │       ├── date.ts               # 日期格式化工具
+│   │       └── money.ts              # TWD 整數 ↔ 顯示轉換
+│   ├── ui/                           # shadcn-svelte 元件庫（vendored；排除於 lint/format/coverage）
+│   │   └── src/
+│   │       ├── button/               # Button 元件
+│   │       ├── card/                 # Card 元件
+│   │       ├── input/                # Input 元件
+│   │       ├── select/               # Select 元件
+│   │       ├── label/                # Label 元件
+│   │       ├── field/                # Field（表單欄位 wrapper）
+│   │       ├── separator/            # Separator 元件
+│   │       ├── alert-dialog/         # Alert dialog 元件
+│   │       ├── ConfirmDialog.svelte  # 組合式確認對話框
+│   │       └── utils.ts              # cn() class-merge 工具
+│   └── typescript-config/            # 共用基礎 tsconfig
+│       └── base.json
+├── e2e/                              # Playwright E2E 測試
+│   ├── expense.spec.ts               # 交易 CRUD 流程
+│   ├── admin.spec.ts                 # 管理員治理流程
+│   ├── sort.spec.ts                  # 表格排序 + URL 同步
+│   ├── global-setup.ts               # E2E 前置 DB seed
+│   └── global-teardown.ts            # E2E 後置 DB 清理
+├── .agents/skills/                   # AI skills（karpathy、shadcn-svelte、hono、prisma 等）
+├── .github/workflows/ci.yml          # GitHub Actions：透過 turbo 執行 build、lint、check、test
+├── ai-docs/                          # AI 協作的 task plan + session log
+├── compose.yaml                      # Docker Compose — 本機 PostgreSQL
+├── playwright.config.ts              # Playwright 瀏覽器矩陣設定
+├── eslint.config.js                  # .svelte 檔案的 ESLint config
+├── .oxlintrc.json                    # oxlint 規則（JS/TS）
+├── .oxfmtrc.json                     # oxfmt formatter 設定
+├── .mcp.json                         # MCP server 設定（svelte、context7 等）
+├── commitlint.config.mjs             # Conventional commit 規則
+├── sonar-project.properties          # SonarQube 專案設定
+├── turbo.json                        # Turborepo pipeline 設定
+├── pnpm-workspace.yaml               # Workspace 定義
+└── package.json                      # 委派給 turbo 的根 scripts
 ```
 
 ---

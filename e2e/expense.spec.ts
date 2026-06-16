@@ -49,10 +49,12 @@ test("John signs in, adds an expense, then deletes it", async ({ page, isMobile 
 
   // renders a logout form on authed pages, so a bare submit selector would be ambiguous).
   await row.locator('form[action="?/delete"] button[type="submit"]').click();
-  const dialog = page.locator("dialog[open]");
+  // ConfirmDialog renders shadcn-svelte's AlertDialog (bits-ui) — a portal with
+  // role="alertdialog", not a native <dialog> element.
+  const dialog = page.getByRole("alertdialog");
   await expect(dialog).toBeVisible();
-  // The confirm button is the second button in the dialog action bar.
-  await dialog.locator("button").nth(1).click();
+  // The footer is Cancel then Action, so the confirm button is the second one (locale-agnostic).
+  await dialog.getByRole("button").nth(1).click();
 
   const rowAfterDelete = isMobile
     ? page.locator("li", { hasText: note })

@@ -6,7 +6,9 @@ node_modules
 .netlify
 .wrangler
 /.svelte-kit
+**/.svelte-kit
 /build
+dist
 
 # OS
 .DS_Store
@@ -28,19 +30,24 @@ playwright/.cache
 # Vitest
 coverage
 
+# Turborepo
+.turbo
+
 # AI
 
 .antigravitycli
 .claude/skills/
 CLAUDE.md
 session-handoff
+.mimocode
+
 .eslintcache
 
 # Paraglide (generated)
-src/lib/paraglide
+apps/web/src/lib/paraglide
 
 # Prisma (generated)
-src/lib/server/db/generated
+packages/db/src/generated
 
 # pnpm
 .pnpm-store

@@ -1,0 +1,28 @@
+{
+  "name": "@ultra-light/api",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --noEmit",
+    "check": "tsc --noEmit",
+    "dev": "tsx watch --env-file=../../.env src/index.ts",
+    "lint": "oxlint src/",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.0.5",
+    "@scalar/hono-api-reference": "^0.11.3",
+    "@ultra-light/db": "workspace:*",
+    "@ultra-light/shared": "workspace:*",
+    "hono": "^4.12.25"
+  },
+  "devDependencies": {
+    "@ultra-light/typescript-config": "workspace:*",
+    "@vitest/coverage-v8": "4.1.9",
+    "tsx": "4.22.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
+  }
+}
