@@ -5,8 +5,8 @@
       "url": "https://mcp.svelte.dev/mcp"
     },
     "Prisma-Local": {
-      "command": "npx",
-      "args": ["-y", "prisma", "mcp"]
+      "command": "pnpm",
+      "args": ["-C", "packages/db", "exec", "prisma", "mcp"]
     },
     "context7": {
       "command": "context7-mcp"
