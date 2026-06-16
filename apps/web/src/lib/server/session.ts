@@ -1,3 +1,5 @@
+import { env } from "$env/dynamic/private";
+
 import { SESSION_COOKIE_NAME, type SessionUser } from "./auth";
 
 export async function resolveSessionUser(
@@ -8,7 +10,7 @@ export async function resolveSessionUser(
   }
 
   try {
-    const baseUrl = process.env.API_BASE_URL || "http://localhost:3001";
+    const baseUrl = env.API_BASE_URL || "http://localhost:3001";
     const response = await fetch(`${baseUrl}/api/auth/me`, {
       headers: {
         Cookie: `${SESSION_COOKIE_NAME}=${cookieValue}`

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc --noEmit",
+    "build": "pnpm --filter @ultra-light/db db:generate && esbuild src/index.ts --bundle --platform=node --format=esm --outfile=api/index.js --external:@prisma/client --external:@prisma/adapter-pg --external:pg",
     "check": "tsc --noEmit",
     "dev": "tsx watch --env-file=../../.env src/index.ts",
     "lint": "oxlint src/",
@@ -13,14 +13,18 @@
   },
   "dependencies": {
     "@hono/node-server": "^2.0.5",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "@scalar/hono-api-reference": "^0.11.3",
     "@ultra-light/db": "workspace:*",
     "@ultra-light/shared": "workspace:*",
-    "hono": "^4.12.25"
+    "hono": "^4.12.25",
+    "pg": "^8.21.0"
   },
   "devDependencies": {
     "@ultra-light/typescript-config": "workspace:*",
     "@vitest/coverage-v8": "4.1.9",
+    "esbuild": "^0.28.1",
     "tsx": "4.22.4",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"

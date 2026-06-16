@@ -1,3 +1,4 @@
+import { env } from "$env/dynamic/private";
 import { DEMO_EMAIL } from "$lib/constants";
 import * as m from "$lib/paraglide/messages";
 import { fail, redirect } from "@sveltejs/kit";
@@ -5,7 +6,7 @@ import { z } from "zod";
 
 import type { Actions, PageServerLoad } from "./$types";
 
-const BASE_URL = process.env.API_BASE_URL || "http://localhost:3001";
+const BASE_URL = env.API_BASE_URL || "http://localhost:3001";
 
 const emailSchema = z.string().email("Invalid email format");
 

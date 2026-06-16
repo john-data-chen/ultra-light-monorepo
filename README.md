@@ -216,6 +216,37 @@ MCP lets AI tools interact directly with development infrastructure, removing co
 
 Project-specific instructions for AI assistants: the mandatory verification workflow (`pnpm lint` → `pnpm build` → `pnpm check`), commands, and which skills/MCP servers to use for which tasks. AI tools should read this file first when working on the repo.
 
+## Setup Instructions
+
+1. `pnpm install`
+2. Set `.env` following `.env.example`.
+3. `pnpm db:push` / `pnpm db:seed`
+4. `pnpm dev`
+
+## Vercel Deployment
+
+This repository deploys as **two separate Vercel projects** to decouple the SvelteKit frontend from the API and allow for independent scaling.
+
+1. **API Project** (`apps/api`):
+   - **Framework Preset**: None / Other (or Vercel's standard Node preset)
+   - **Build Command**: `turbo run build --filter=@ultra-light/api` (this uses `esbuild` to bundle workspace dependencies and `prisma generate`).
+   - **Environment Variables**:
+     - `DATABASE_URL` (Must point to a production PostgreSQL instance, e.g. Prisma Postgres or Neon)
+     - `SESSION_SECRET` (A strong randomly generated string)
+
+2. **Web Project** (`apps/web`):
+   - **Framework Preset**: SvelteKit
+   - **Build Command**: `turbo run build --filter=@ultra-light/web`
+   - **Environment Variables**:
+     - `API_BASE_URL` (Points to the deployed API project URL, e.g. `https://your-api-project.vercel.app`)
+     - `SESSION_SECRET` (Must match the API project's secret exactly)
+
+> **Note on Workspaces and Vercel:** Vercel's default Node.js builder cannot inherently resolve TypeScript workspace dependencies (`@ultra-light/shared`, `@ultra-light/db`) at runtime. To solve this, the `apps/api` build script bundles the API entry point into a single runtime-ready JavaScript file (`api/index.js`) before deployment.
+
+---
+
+## Code Tour
+
 Delivery pipeline:
 
 ```mermaid
