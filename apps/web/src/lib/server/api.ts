@@ -28,7 +28,12 @@ export async function apiFetch<T>(path: string, options: ApiOptions = {}): Promi
     throw new Error(error.message || `API error: ${response.status}`);
   }
 
-  return response.json();
+  if (response.status === 204) {
+    return undefined as unknown as T;
+  }
+
+  const text = await response.text();
+  return text ? JSON.parse(text) : (undefined as unknown as T);
 }
 
 export function getCookieHeader(cookies: { get: (name: string) => string | undefined }): string {
