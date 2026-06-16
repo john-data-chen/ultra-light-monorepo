@@ -299,35 +299,111 @@ pnpm db:seed       # Seed demo users + sample transactions
 ```text
 .
 ├── apps/
-│   ├── web/                    # SvelteKit 前端（SSR proxy 到 Hono API）
+│   ├── web/                          # SvelteKit 前端（SSR proxy 到 Hono API）
 │   │   ├── src/
-│   │   │   ├── lib/components/ # 功能元件（圖表、表單、切換器）
-│   │   │   ├── lib/server/     # SSR proxy（apiFetch）+ session 解析
-│   │   │   └── routes/         # SvelteKit 頁面 + server load/actions
-│   │   ├── vite.config.ts      # Tailwind、SvelteKit、Paraglide、Vitest
-│   │   └── components.json     # shadcn-svelte 設定
-│   └── api/                    # Hono.js API（所有商業邏輯）
+│   │   │   ├── app.d.ts              # SvelteKit 環境型別宣告
+│   │   │   ├── app.html              # HTML shell 模板
+│   │   │   ├── hooks.server.ts       # SvelteKit server hooks（CSP nonce、session、HSTS）
+│   │   │   ├── lib/
+│   │   │   │   ├── components/       # 功能元件
+│   │   │   │   │   ├── CategoryChart.svelte    # 純 CSS donut 圓環圖
+│   │   │   │   │   ├── LocaleSwitcher.svelte   # i18n 語言切換器
+│   │   │   │   │   ├── ThemeToggle.svelte      # 淺色/深色/系統主題切換器
+│   │   │   │   │   └── TransactionForm.svelte  # 新增/編輯交易表單
+│   │   │   │   ├── server/           # 僅限伺服器端使用的 helpers
+│   │   │   │   │   ├── api.ts        # apiFetch() — SSR proxy 至 Hono API
+│   │   │   │   │   ├── auth.ts       # requireAuth 守衛
+│   │   │   │   │   └── session.ts    # Session cookie 讀寫
+│   │   │   │   ├── table/            # TanStack Table 工具
+│   │   │   │   │   ├── sort.ts       # URL 同步排序 helpers
+│   │   │   │   │   └── sorted-table.svelte.ts  # Headless 排序表格 rune
+│   │   │   │   ├── paraglide/        # Paraglide i18n 生成的 runtime
+│   │   │   │   ├── categories.ts     # 客戶端 category 標籤解析
+│   │   │   │   ├── theme.svelte.ts   # 主題 rune（淺色/深色/系統）
+│   │   │   │   └── money.ts          # TWD 格式化 helpers
+│   │   │   └── routes/               # SvelteKit 頁面 + server load/actions
+│   │   │       ├── +layout.svelte    # 根 layout（analytics、theme、nav）
+│   │   │       ├── +layout.server.ts # 根 layout server load（session 守衛）
+│   │   │       ├── +page.svelte      # 儀表板（統計 + donut 圖）
+│   │   │       ├── +page.server.ts   # 儀表板資料載入
+│   │   │       ├── layout.css        # 全域樣式 + Tailwind @source
+│   │   │       ├── login/            # 免密碼 email 登入頁
+│   │   │       ├── logout/           # 登出 action
+│   │   │       ├── transactions/     # 交易清單 + CRUD 頁面
+│   │   │       └── admin/            # 管理員治理介面（僅限 admin）
+│   │   ├── vite.config.ts            # Tailwind、SvelteKit、Paraglide、Vitest
+│   │   └── components.json           # shadcn-svelte 設定
+│   └── api/                          # Hono.js API（所有商業邏輯）
 │       └── src/
-│           ├── routes/         # 路由處理（transactions、stats、auth、admin、docs）
-│           ├── middleware/     # Auth + rate-limit middleware
-│           ├── index.ts        # App 進入點（掛載路由、@hono/node-server）
-│           └── types.ts        # Hono generics 用的 AppEnv 型別
+│           ├── routes/               # 路由處理
+│           │   ├── transactions.ts   # CRUD + 分頁
+│           │   ├── stats.ts          # 月度統計聚合
+│           │   ├── auth.ts           # /api/auth（session 驗證）
+│           │   ├── login.ts          # /api/login（免密碼 email）
+│           │   ├── admin.ts          # /api/admin（僅限管理員治理）
+│           │   └── docs.ts           # /api/docs（Scalar UI 掛載）
+│           ├── middleware/
+│           │   ├── auth.ts           # Cookie session 驗證 middleware
+│           │   └── rate-limit.ts     # 記憶體內 fixed-window 限流
+│           ├── openapi.ts            # OpenAPI 3.1 規範定義
+│           ├── index.ts              # App 進入點（掛載路由、@hono/node-server）
+│           └── types.ts              # Hono generics 用的 AppEnv 型別
 ├── packages/
-│   ├── db/                     # Prisma schema + migrations + generated client + prisma.config.ts
-│   │   ├── prisma/             # Schema + SQL migrations
-│   │   └── src/                # Client、queries、audit、admin helpers、seed
-│   ├── shared/                 # 共用 Zod schemas + 領域型別
-│   │   └── src/                # Transaction schemas、categories、date、money utils
-│   ├── ui/                     # shadcn-svelte 元件庫（排除於 lint/format/coverage）
-│   └── typescript-config/      # 共用基礎 tsconfig（base.json）
-├── .agents/skills/             # AI skills（karpathy、shadcn-svelte、hono、prisma 等）
-├── .github/workflows/ci.yml    # GitHub Actions：透過 turbo 執行 build、lint、check、test
-├── e2e/                        # Playwright E2E 測試（雙 app 拓撲）
-├── ai-docs/                    # AI 協作的 task plan + session log
-├── eslint.config.js            # .svelte 檔案的 ESLint config
-├── turbo.json                  # Turborepo pipeline 設定
-├── pnpm-workspace.yaml         # Workspace 定義
-└── package.json                # 委派給 turbo 的根 scripts
+│   ├── db/                           # Prisma schema + migrations + generated client
+│   │   ├── prisma/
+│   │   │   ├── schema.prisma         # Prisma schema（User、Transaction、AuditLog）
+│   │   │   └── migrations/           # SQL migration 歷史
+│   │   └── src/
+│   │       ├── client.ts             # PrismaClient 單例（pg driver adapter）
+│   │       ├── queries.ts            # 型別安全的查詢 helpers（transactions、stats）
+│   │       ├── audit.ts              # 稽核日誌寫入 helpers
+│   │       ├── admin.ts              # 管理員聚合查詢
+│   │       ├── schema.ts             # Prisma schema 重新匯出 / 型別 helpers
+│   │       ├── seed.ts               # Demo 使用者 + 範例交易資料
+│   │       └── generated/            # Prisma 生成的 client（git-ignored）
+│   ├── shared/                       # 共用 Zod schemas + 領域型別
+│   │   └── src/
+│   │       ├── schemas.ts            # Zod 請求/回應 schemas
+│   │       ├── categories.ts         # Category 鍵值 + metadata
+│   │       ├── transaction.ts        # Transaction 領域型別
+│   │       ├── types.ts              # 共用 TS 型別（Role 等）
+│   │       ├── constants.ts          # 全域常數
+│   │       ├── date.ts               # 日期格式化工具
+│   │       └── money.ts              # TWD 整數 ↔ 顯示轉換
+│   ├── ui/                           # shadcn-svelte 元件庫（vendored；排除於 lint/format/coverage）
+│   │   └── src/
+│   │       ├── button/               # Button 元件
+│   │       ├── card/                 # Card 元件
+│   │       ├── input/                # Input 元件
+│   │       ├── select/               # Select 元件
+│   │       ├── label/                # Label 元件
+│   │       ├── field/                # Field（表單欄位 wrapper）
+│   │       ├── separator/            # Separator 元件
+│   │       ├── alert-dialog/         # Alert dialog 元件
+│   │       ├── ConfirmDialog.svelte  # 組合式確認對話框
+│   │       └── utils.ts              # cn() class-merge 工具
+│   └── typescript-config/            # 共用基礎 tsconfig
+│       └── base.json
+├── e2e/                              # Playwright E2E 測試
+│   ├── expense.spec.ts               # 交易 CRUD 流程
+│   ├── admin.spec.ts                 # 管理員治理流程
+│   ├── sort.spec.ts                  # 表格排序 + URL 同步
+│   ├── global-setup.ts               # E2E 前置 DB seed
+│   └── global-teardown.ts            # E2E 後置 DB 清理
+├── .agents/skills/                   # AI skills（karpathy、shadcn-svelte、hono、prisma 等）
+├── .github/workflows/ci.yml          # GitHub Actions：透過 turbo 執行 build、lint、check、test
+├── ai-docs/                          # AI 協作的 task plan + session log
+├── compose.yaml                      # Docker Compose — 本機 PostgreSQL
+├── playwright.config.ts              # Playwright 瀏覽器矩陣設定
+├── eslint.config.js                  # .svelte 檔案的 ESLint config
+├── .oxlintrc.json                    # oxlint 規則（JS/TS）
+├── .oxfmtrc.json                     # oxfmt formatter 設定
+├── .mcp.json                         # MCP server 設定（svelte、context7 等）
+├── commitlint.config.mjs             # Conventional commit 規則
+├── sonar-project.properties          # SonarQube 專案設定
+├── turbo.json                        # Turborepo pipeline 設定
+├── pnpm-workspace.yaml               # Workspace 定義
+└── package.json                      # 委派給 turbo 的根 scripts
 ```
 
 ---

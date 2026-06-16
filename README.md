@@ -300,35 +300,111 @@ pnpm db:seed       # Seed demo users + sample transactions
 ```text
 .
 ├── apps/
-│   ├── web/                    # SvelteKit frontend (SSR proxy to Hono API)
+│   ├── web/                          # SvelteKit frontend (SSR proxy to Hono API)
 │   │   ├── src/
-│   │   │   ├── lib/components/ # Feature components (chart, form, switchers)
-│   │   │   ├── lib/server/     # SSR proxy (apiFetch) + session resolution
-│   │   │   └── routes/         # SvelteKit pages + server load/actions
-│   │   ├── vite.config.ts      # Tailwind, SvelteKit, Paraglide, Vitest
-│   │   └── components.json     # shadcn-svelte configuration
-│   └── api/                    # Hono.js API (all business logic)
+│   │   │   ├── app.d.ts              # SvelteKit ambient type declarations
+│   │   │   ├── app.html              # HTML shell template
+│   │   │   ├── hooks.server.ts       # SvelteKit server hooks (CSP nonce, session, HSTS)
+│   │   │   ├── lib/
+│   │   │   │   ├── components/       # Feature components
+│   │   │   │   │   ├── CategoryChart.svelte    # Pure-CSS donut chart
+│   │   │   │   │   ├── LocaleSwitcher.svelte   # i18n language toggle
+│   │   │   │   │   ├── ThemeToggle.svelte      # Light/dark/system switcher
+│   │   │   │   │   └── TransactionForm.svelte  # Add/edit transaction form
+│   │   │   │   ├── server/           # Server-only helpers
+│   │   │   │   │   ├── api.ts        # apiFetch() — SSR proxy to Hono API
+│   │   │   │   │   ├── auth.ts       # requireAuth guard
+│   │   │   │   │   └── session.ts    # Session cookie read/write
+│   │   │   │   ├── table/            # TanStack Table utilities
+│   │   │   │   │   ├── sort.ts       # URL-sync sort helpers
+│   │   │   │   │   └── sorted-table.svelte.ts  # Headless sorted-table rune
+│   │   │   │   ├── paraglide/        # Generated Paraglide i18n runtime
+│   │   │   │   ├── categories.ts     # Client-side category label resolver
+│   │   │   │   ├── theme.svelte.ts   # Theme rune (light/dark/system)
+│   │   │   │   └── money.ts          # TWD formatting helpers
+│   │   │   └── routes/               # SvelteKit pages + server load/actions
+│   │   │       ├── +layout.svelte    # Root layout (analytics, theme, nav)
+│   │   │       ├── +layout.server.ts # Root layout server load (session guard)
+│   │   │       ├── +page.svelte      # Dashboard (stats + donut chart)
+│   │   │       ├── +page.server.ts   # Dashboard data load
+│   │   │       ├── layout.css        # Global styles + Tailwind @source
+│   │   │       ├── login/            # Passwordless email login page
+│   │   │       ├── logout/           # Logout action
+│   │   │       ├── transactions/     # Transaction list + CRUD pages
+│   │   │       └── admin/            # Admin governance view (admin only)
+│   │   ├── vite.config.ts            # Tailwind, SvelteKit, Paraglide, Vitest
+│   │   └── components.json           # shadcn-svelte configuration
+│   └── api/                          # Hono.js API (all business logic)
 │       └── src/
-│           ├── routes/         # Route handlers (transactions, stats, auth, admin, docs)
-│           ├── middleware/     # Auth + rate-limit middleware
-│           ├── index.ts        # App entry (mounts routes, @hono/node-server)
-│           └── types.ts        # AppEnv type for Hono generics
+│           ├── routes/               # Route handlers
+│           │   ├── transactions.ts   # CRUD + pagination
+│           │   ├── stats.ts          # Monthly stats aggregation
+│           │   ├── auth.ts           # /api/auth (session validation)
+│           │   ├── login.ts          # /api/login (passwordless email)
+│           │   ├── admin.ts          # /api/admin (admin-only governance)
+│           │   └── docs.ts           # /api/docs (Scalar UI mount)
+│           ├── middleware/
+│           │   ├── auth.ts           # Cookie session auth middleware
+│           │   └── rate-limit.ts     # Fixed-window in-memory rate limiter
+│           ├── openapi.ts            # OpenAPI 3.1 spec definition
+│           ├── index.ts              # App entry (mounts routes, @hono/node-server)
+│           └── types.ts              # AppEnv type for Hono generics
 ├── packages/
-│   ├── db/                     # Prisma schema + migrations + generated client + prisma.config.ts
-│   │   ├── prisma/             # Schema + SQL migrations
-│   │   └── src/                # Client, queries, audit, admin helpers, seed
-│   ├── shared/                 # Shared Zod schemas + domain types
-│   │   └── src/                # Transaction schemas, categories, date, money utils
-│   ├── ui/                     # shadcn-svelte component library (excluded from lint/format/coverage)
-│   └── typescript-config/      # Shared base tsconfig (base.json)
-├── .agents/skills/             # AI skills (karpathy, shadcn-svelte, hono, prisma, etc.)
-├── .github/workflows/ci.yml    # GitHub Actions: build, lint, check, test via turbo
-├── e2e/                        # Playwright E2E tests (2-app topology)
-├── ai-docs/                    # Task plan + session log for AI collaboration
-├── eslint.config.js            # ESLint config for .svelte files
-├── turbo.json                  # Turborepo pipeline config
-├── pnpm-workspace.yaml         # Workspace definition
-└── package.json                # Root scripts delegating to turbo
+│   ├── db/                           # Prisma schema + migrations + generated client
+│   │   ├── prisma/
+│   │   │   ├── schema.prisma         # Prisma schema (User, Transaction, AuditLog)
+│   │   │   └── migrations/           # SQL migration history
+│   │   └── src/
+│   │       ├── client.ts             # PrismaClient singleton (pg driver adapter)
+│   │       ├── queries.ts            # Typed query helpers (transactions, stats)
+│   │       ├── audit.ts              # Audit log write helpers
+│   │       ├── admin.ts              # Admin aggregation queries
+│   │       ├── schema.ts             # Prisma schema re-exports / type helpers
+│   │       ├── seed.ts               # Demo users + sample transaction seeder
+│   │       └── generated/            # Prisma-generated client (git-ignored)
+│   ├── shared/                       # Shared Zod schemas + domain types
+│   │   └── src/
+│   │       ├── schemas.ts            # Zod request/response schemas
+│   │       ├── categories.ts         # Category keys + metadata
+│   │       ├── transaction.ts        # Transaction domain type
+│   │       ├── types.ts              # Shared TS types (Role, etc.)
+│   │       ├── constants.ts          # App-wide constants
+│   │       ├── date.ts               # Date formatting utilities
+│   │       └── money.ts              # TWD integer ↔ display conversion
+│   ├── ui/                           # shadcn-svelte components (vendored; excluded from lint/format/coverage)
+│   │   └── src/
+│   │       ├── button/               # Button component
+│   │       ├── card/                 # Card component
+│   │       ├── input/                # Input component
+│   │       ├── select/               # Select component
+│   │       ├── label/                # Label component
+│   │       ├── field/                # Field (form field wrapper)
+│   │       ├── separator/            # Separator component
+│   │       ├── alert-dialog/         # Alert dialog component
+│   │       ├── ConfirmDialog.svelte  # Composed confirm dialog
+│   │       └── utils.ts              # cn() class-merge utility
+│   └── typescript-config/            # Shared base tsconfig
+│       └── base.json
+├── e2e/                              # Playwright E2E tests
+│   ├── expense.spec.ts               # Transaction CRUD flow
+│   ├── admin.spec.ts                 # Admin governance flow
+│   ├── sort.spec.ts                  # Table sort + URL sync
+│   ├── global-setup.ts               # DB seed before E2E run
+│   └── global-teardown.ts            # DB cleanup after E2E run
+├── .agents/skills/                   # AI skills (karpathy, shadcn-svelte, hono, prisma, etc.)
+├── .github/workflows/ci.yml          # GitHub Actions: build, lint, check, test via turbo
+├── ai-docs/                          # AI collaboration task plan + session log
+├── compose.yaml                      # Docker Compose — local PostgreSQL
+├── playwright.config.ts              # Playwright browser matrix config
+├── eslint.config.js                  # ESLint config for .svelte files
+├── .oxlintrc.json                    # oxlint rules (JS/TS)
+├── .oxfmtrc.json                     # oxfmt formatter config
+├── .mcp.json                         # MCP server config (svelte, context7, etc.)
+├── commitlint.config.mjs             # Conventional commit rules
+├── sonar-project.properties          # SonarQube project config
+├── turbo.json                        # Turborepo pipeline config
+├── pnpm-workspace.yaml               # Workspace definition
+└── package.json                      # Root scripts delegating to turbo
 ```
 
 ---
