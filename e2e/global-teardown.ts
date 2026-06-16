@@ -1,13 +1,12 @@
-import { PrismaPg } from "@prisma/adapter-pg";
-
-import { PrismaClient } from "../packages/db/src/generated/client";
-
 // Removes the audit rows this run created: expense.spec.ts signs in as John and
 // creates + deletes a Food 999 expense (summary "expense Food 999" per the
 // `${type} ${category} ${amount}` format in the transaction actions). Runs once
 // after all projects finish — a per-test afterAll would race across the four
 // parallel browser projects. Scoped to ids above the global-setup baseline so
 // audit history from before this run is never touched.
+//
+// Uses the @ultra-light/db package; loadEnvFile + dynamic import keep DATABASE_URL
+// available to the db singleton even if teardown runs in a fresh module context.
 export default async function globalTeardown() {
   const baseline = Number(process.env.E2E_AUDIT_BASELINE_ID);
   if (!Number.isInteger(baseline)) {
@@ -15,14 +14,12 @@ export default async function globalTeardown() {
     return;
   }
 
-  // DATABASE_URL was loaded into this process by global-setup.
-  const databaseUrl = process.env.DATABASE_URL;
-  if (!databaseUrl) {
+  process.loadEnvFile(".env");
+  if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL is not set");
   }
 
-  const adapter = new PrismaPg({ connectionString: databaseUrl, max: 1 });
-  const db = new PrismaClient({ adapter });
+  const { db } = await import("@ultra-light/db");
   try {
     const john = await db.user.findUnique({
       where: { email: "john@example.com" },

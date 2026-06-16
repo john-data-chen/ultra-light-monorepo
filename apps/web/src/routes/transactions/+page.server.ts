@@ -21,17 +21,22 @@ export const load: PageServerLoad = async ({ locals, url, cookies }) => {
   if (month) {
     params.set("month", month);
   }
+  // The list renders all rows client-side (sort/filter happen in the browser) and has no
+  // pagination UI, so request the API's max page size to avoid silently truncating at the
+  // default limit of 20.
+  params.set("limit", "100");
 
-  const transactions = await apiFetch<
-    Array<{
+  const { data: transactions } = await apiFetch<{
+    data: Array<{
       id: number;
       type: string;
       category: string;
       amount: number;
       occurredOn: string;
-      note: string;
-    }>
-  >(`/api/transactions?${params.toString()}`, {
+      note: string | null;
+    }>;
+    pagination: { total: number; limit: number; offset: number };
+  }>(`/api/transactions?${params.toString()}`, {
     cookie: getCookieHeader(cookies)
   });
 

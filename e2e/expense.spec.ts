@@ -47,12 +47,47 @@ test("John signs in, adds an expense, then deletes it", async ({ page, isMobile 
     : page.locator("tr").filter({ hasText: note });
   await expect(row).toBeVisible();
 
+  // Neutralize entry/exit animations. The bits-ui AlertDialog Content is position:fixed with
+  // a zoom/fade `animation-fill-mode: both` enter animation; its lingering transform makes a
+  // transformed containing block, so chromium computes the (visually centered) confirm button
+  // as "outside the viewport" and the click never lands. Zeroing animation/transition durations
+  // pins the dialog at its true fixed center so the button is reliably clickable.
+  await page.addStyleTag({
+    content: `*, *::before, *::after { animation-duration: 0s !important; animation-delay: 0s !important; transition-duration: 0s !important; }`
+  });
+
   // renders a logout form on authed pages, so a bare submit selector would be ambiguous).
   await row.locator('form[action="?/delete"] button[type="submit"]').click();
-  const dialog = page.locator("dialog[open]");
+  // ConfirmDialog renders shadcn-svelte's AlertDialog (bits-ui) — a portal with
+  // role="alertdialog", not a native <dialog> element.
+  const dialog = page.getByRole("alertdialog");
   await expect(dialog).toBeVisible();
-  // The confirm button is the second button in the dialog action bar.
-  await dialog.locator("button").nth(1).click();
+  const diag = await dialog
+    .getByRole("button")
+    .nth(1)
+    .evaluate((el) => {
+      const r = el.getBoundingClientRect();
+      const transforms: string[] = [];
+      let anc: HTMLElement | null = el.parentElement;
+      while (anc) {
+        const s = getComputedStyle(anc);
+        if (s.transform !== "none" || s.filter !== "none" || s.perspective !== "none") {
+          transforms.push(`${anc.tagName}.${anc.className} t=${s.transform} f=${s.filter}`);
+        }
+        anc = anc.parentElement;
+      }
+      return {
+        r: { x: r.x, y: r.y, w: r.width, h: r.height },
+        vw: window.innerWidth,
+        vh: window.innerHeight,
+        sx: window.scrollX,
+        sy: window.scrollY,
+        transforms
+      };
+    });
+  console.log("DIAG", JSON.stringify(diag));
+  // The footer is Cancel then Action, so the confirm button is the second one (locale-agnostic).
+  await dialog.getByRole("button").nth(1).click();
 
   const rowAfterDelete = isMobile
     ? page.locator("li", { hasText: note })

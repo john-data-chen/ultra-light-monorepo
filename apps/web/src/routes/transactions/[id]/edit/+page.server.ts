@@ -66,7 +66,15 @@ export const actions: Actions = {
     await apiFetch(`/api/transactions/${id}`, {
       method: "PATCH",
       cookie: getCookieHeader(cookies),
-      body: result.data
+      // The API validates amount as a number and note as a nullable field; the form delivers
+      // amount as a numeric string and omits an empty note.
+      body: {
+        type: result.data.type,
+        category: result.data.category,
+        amount: Number(result.data.amount),
+        occurredOn: result.data.occurredOn,
+        note: result.data.note ?? null
+      }
     });
 
     redirect(303, "/transactions");
