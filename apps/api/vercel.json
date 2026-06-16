@@ -2,10 +2,5 @@
   "framework": null,
   "buildCommand": "pnpm run build",
   "outputDirectory": "public",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/api/index.js"
-    }
-  ]
+  "routes": [{ "src": "/(.*)", "dest": "/api/index" }]
 }

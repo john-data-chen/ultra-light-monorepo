@@ -9,7 +9,6 @@ node_modules
 **/.svelte-kit
 /build
 dist
-apps/api/api
 
 # OS
 .DS_Store
