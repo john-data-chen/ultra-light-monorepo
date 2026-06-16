@@ -34,6 +34,8 @@ coverage
 .claude/skills/
 CLAUDE.md
 session-handoff
+.mimocode
+
 .eslintcache
 
 # Paraglide (generated)
