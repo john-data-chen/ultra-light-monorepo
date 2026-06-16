@@ -4,7 +4,7 @@ import { db } from "@ultra-light/db";
 import { getCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
 
-import type { AppEnv, SessionUser } from "../types";
+import type { AppEnv, SessionUser } from "../types.js";
 
 const COOKIE_NAME = "session";
 

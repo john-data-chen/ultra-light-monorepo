@@ -2,8 +2,8 @@ import { getMonthlyStats } from "@ultra-light/db";
 import { MonthString } from "@ultra-light/shared";
 import { Hono } from "hono";
 
-import { authMiddleware } from "../middleware/auth";
-import type { AppEnv } from "../types";
+import { authMiddleware } from "../middleware/auth.js";
+import type { AppEnv } from "../types.js";
 
 const stats = new Hono<AppEnv>();
 

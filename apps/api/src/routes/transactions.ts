@@ -9,9 +9,9 @@ import {
 import { TransactionCreate, TransactionUpdate, TransactionListQuery } from "@ultra-light/shared";
 import { Hono } from "hono";
 
-import { authMiddleware } from "../middleware/auth";
-import { rateLimitMiddleware } from "../middleware/rate-limit";
-import type { AppEnv } from "../types";
+import { authMiddleware } from "../middleware/auth.js";
+import { rateLimitMiddleware } from "../middleware/rate-limit.js";
+import type { AppEnv } from "../types.js";
 
 const transactions = new Hono<AppEnv>();
 
@@ -86,7 +86,10 @@ transactions.post("/", rateLimitMiddleware({ windowMs: 60 * 1000, max: 100 }), a
     return c.json({ message: result.error.issues[0].message }, 400);
   }
 
-  const transaction = await createTransaction(user.id, result.data);
+  const transaction = await createTransaction(user.id, {
+    ...result.data,
+    note: result.data.note ?? null
+  });
   await recordAudit(
     user.id,
     "create",
@@ -148,7 +151,10 @@ transactions.patch("/:id", rateLimitMiddleware({ windowMs: 60 * 1000, max: 100 }
     return c.json({ message: validation.error.issues[0].message }, 400);
   }
 
-  const updated = await updateTransaction(user.id, id, validation.data);
+  const updated = await updateTransaction(user.id, id, {
+    ...validation.data,
+    note: validation.data.note ?? null
+  });
   if (!updated) {
     return c.json({ message: "Transaction not found" }, 404);
   }

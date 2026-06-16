@@ -43,7 +43,7 @@ import {
   listUsersWithStats
 } from "@ultra-light/db";
 
-import app from "./index";
+import app from "./index.js";
 
 const mockDb = vi.mocked(db) as any;
 

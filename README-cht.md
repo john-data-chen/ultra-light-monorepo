@@ -1,7 +1,7 @@
 # Ultra Light Monorepo：多使用者線上記帳本 — Hono API + SvelteKit 前端
 
 [![codecov](https://codecov.io/gh/john-data-chen/ultra-light-monorepo/graph/badge.svg?token=GTgQxmf2hR)](https://codecov.io/gh/john-data-chen/ultra-light-monorepo)
-[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=john-data-chen_ultra-light-monorepo)](https://sonarcloud.io/summary/new_code?id=john-data-chen_ultra-light-monorepo)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_ultra-light-monorepo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_ultra-light-monorepo)
 [![CI](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
