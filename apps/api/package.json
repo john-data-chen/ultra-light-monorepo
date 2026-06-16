@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.14.0",
+    "@hono/zod-openapi": "^1.4.0",
+    "@scalar/hono-api-reference": "^0.11.3",
     "@ultra-light/db": "workspace:*",
     "@ultra-light/shared": "workspace:*",
     "hono": "^4.7.0"

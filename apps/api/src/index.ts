@@ -3,6 +3,7 @@ import { logger } from "hono/logger";
 
 import admin from "./routes/admin";
 import auth from "./routes/auth";
+import docs from "./routes/docs";
 import login from "./routes/login";
 import stats from "./routes/stats";
 import transactions from "./routes/transactions";
@@ -14,6 +15,7 @@ app.use("*", logger());
 
 app.get("/", (c) => c.json({ message: "Ultra Light API" }));
 
+app.route("/api", docs);
 app.route("/api/auth", auth);
 app.route("/api/login", login);
 app.route("/api/transactions", transactions);
