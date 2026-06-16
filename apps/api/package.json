@@ -12,11 +12,11 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@hono/node-server": "^1.14.0",
+    "@hono/node-server": "^2.0.5",
     "@scalar/hono-api-reference": "^0.11.3",
     "@ultra-light/db": "workspace:*",
     "@ultra-light/shared": "workspace:*",
-    "hono": "^4.7.0"
+    "hono": "^4.12.25"
   },
   "devDependencies": {
     "@ultra-light/typescript-config": "workspace:*",
