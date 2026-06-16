@@ -6,12 +6,13 @@
   "scripts": {
     "build": "tsc --noEmit",
     "check": "tsc --noEmit",
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --env-file=../../.env src/index.ts",
     "lint": "oxlint src/",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
+    "@hono/node-server": "^1.14.0",
     "@scalar/hono-api-reference": "^0.11.3",
     "@ultra-light/db": "workspace:*",
     "@ultra-light/shared": "workspace:*",

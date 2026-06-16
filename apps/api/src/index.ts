@@ -30,3 +30,11 @@ app.onError((err, c) => {
 });
 
 export default app;
+
+if (process.env.NODE_ENV !== "test") {
+  const port = Number(process.env.PORT) || 3001;
+  console.log(`API listening on http://localhost:${port}`);
+  import("@hono/node-server").then(({ serve }) => {
+    serve({ fetch: app.fetch, port });
+  });
+}
