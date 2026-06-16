@@ -72,5 +72,12 @@
     "typescript/unbound-method": "warn",
     "typescript/use-unknown-in-catch-callback-variable": "warn"
   },
-  "ignorePatterns": ["node_modules/", "static", ".agents", "coverage", "packages/db/src/generated"]
+  "ignorePatterns": [
+    "node_modules/",
+    "static",
+    ".agents",
+    "coverage",
+    "packages/db/src/generated",
+    "packages/ui"
+  ]
 }

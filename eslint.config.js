@@ -17,7 +17,8 @@ export default [
       "coverage/",
       "static/",
       ".agents/",
-      "**/.svelte-kit/**"
+      "**/.svelte-kit/**",
+      "packages/ui/**"
     ]
   },
   js.configs.recommended,
@@ -44,5 +45,5 @@ export default [
     }
   },
   // Keep this last so its rule-disabling wins over the recommended presets above.
-  ...oxlint.buildFromOxlintConfigFile("./.oxlintrc.json")
+  ...oxlint.buildFromOxlintConfigFile(import.meta.dirname + "/.oxlintrc.json")
 ];

@@ -25,6 +25,7 @@
     "tailwind-variants": "^3.2.2"
   },
   "devDependencies": {
+    "@ultra-light/typescript-config": "workspace:*",
     "svelte": "^5.56.3",
     "typescript": "^6.0.3"
   }

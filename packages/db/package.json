@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",
+    "@ultra-light/typescript-config": "workspace:*",
     "prisma": "^7.8.0",
     "typescript": "^6.0.3",
     "vitest": "^4.1.9"

@@ -1,19 +1,10 @@
 {
+  "extends": "@ultra-light/typescript-config/base.json",
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "rewriteRelativeImportExtensions": true
+    "rootDir": "./src"
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
