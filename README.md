@@ -177,6 +177,8 @@ The AI ​​agent is a governed collaborative developer, not an automated progr
 
 - **Session Handoff** — Task and session logs allow any model to take over from the point of interruption, including but not limited to token or session exhaustion/unexpected crashes.
 
+- **Token discipline** — All AI work runs through the global **caveman** skill to cut token use; output stays terse while technical substance is kept intact.
+
 - **Delivery discipline** — Every change states its requirements, risk, and impact scope, and must pass pre-release verification (lint / build / check / tests) before merge.
 
 ### Measurable Impact
@@ -201,6 +203,8 @@ Skills are committed to the repo and surfaced to AI assistants via `AGENTS.md` /
 | [prisma official AI guide](https://www.prisma.io/docs/ai) (cli, client-api, database-setup, postgres, driver-adapter-implementation) | Prisma ORM workflows: CLI commands, client API, provider setup, Prisma Postgres, driver adapters                            |
 | [svelte-code-writer](https://svelte.dev/docs/ai/skills)                                                                              | CLI tooling for Svelte 5 docs lookup and code analysis when creating/editing any `.svelte` file                             |
 | [svelte-core-bestpractices](https://svelte.dev/docs/ai/skills)                                                                       | Guidance on writing fast, robust, modern Svelte code.                                                                       |
+
+> **[caveman](https://github.com/juliusbrussee/caveman)** is a global skill (not committed to `.agents/skills/`). It compresses all AI output to cut token use (60-90%) and is used for every task in this repo.
 
 ### MCP (Model Context Protocol) Servers
 

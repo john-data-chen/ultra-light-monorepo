@@ -16,12 +16,12 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "zod": "^4.4.3"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@ultra-light/typescript-config": "workspace:*",
-    "@vitest/coverage-v8": "4.1.9",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.9"
+    "@vitest/coverage-v8": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:"
   }
 }

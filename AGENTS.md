@@ -1,11 +1,15 @@
 # AGENTS.md
 
-Guidance for AI working in this repo. Terse on purpose — names of skills, MCP servers,
-tools, and commands are literal. Use them exactly as written.
+AI guidance for this repo. Terse on purpose. Skill/MCP/tool/command names = literal; use exact.
+
+# Token Discipline (MANDATORY)
+
+Use global **caveman** skill (not in `.agents/skills/` — https://github.com/juliusbrussee/caveman)
+for **all** work. Cuts token use 60-90%. Always on; output terse, technical substance intact.
 
 # Verification Workflow (MANDATORY)
 
-After **every** code change, run in order — each must pass with zero errors/warnings:
+After **every** code change, run in order. Each passes, zero errors/warnings:
 
 ```bash
 pnpm lint     # 1. lint (oxlint TS/JS + ESLint .svelte), via turbo
@@ -13,7 +17,7 @@ pnpm build    # 2. build, via turbo
 pnpm check    # 3. type check, via turbo
 ```
 
-After user confirms the change, also run:
+After user confirms, also run:
 
 ```bash
 pnpm test           # 4. unit/integration (vitest), via turbo
@@ -21,7 +25,7 @@ pnpm test:coverage  # 5. coverage (web+api+shared >=90)
 pnpm test:e2e       # 6. e2e (playwright); needs live Postgres + dev servers
 ```
 
-Any step fails → fix before proceeding. Add/update tests after user confirms results.
+Any step fails → fix first. Add/update tests after user confirms.
 
 # Commands
 
@@ -63,4 +67,4 @@ Turborepo monorepo. `apps/web` (SvelteKit, SSR-proxies the API) + `apps/api` (Ho
 | `context7`        | Fetch current docs for any library/framework/API/CLI before answering. Tools: `resolve-library-id` then `query-docs`. Prefer over web search for library docs.                                             |
 | `chrome-devtools` | Verify a running app — navigate, snapshot, screenshot, console, network, `lighthouse_audit`.                                                                                                               |
 
-If a required MCP/skill is missing or disabled, warn the user before starting.
+Required MCP/skill missing/disabled → warn user before starting.

@@ -4,14 +4,17 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json", "package.json"],
       "outputs": [".svelte-kit/output", "dist", ".next"]
     },
     "@ultra-light/db#build": {
       "dependsOn": ["db:generate", "^build"],
+      "inputs": ["src/**", "tsconfig.json", "package.json"],
       "outputs": [".svelte-kit/output", "dist", ".next"]
     },
     "check": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "tsconfig.json"]
     },
     "db:generate": {
       "cache": false,
@@ -21,13 +24,22 @@
       "cache": false,
       "persistent": true
     },
-    "lint": {},
+    "lint": {
+      "inputs": ["src/**", ".oxlintrc.json", "eslint.config.js"]
+    },
+    "format": {
+      "inputs": ["src/**", "*.{js,ts,json,css,html,md,svelte}"]
+    },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "inputs": ["src/**", "vitest.config.ts", "vitest.shared.ts", "tsconfig.json"],
+      "env": ["DATABASE_URL"]
     },
     "test:coverage": {
       "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
+      "inputs": ["src/**", "vitest.config.ts", "vitest.shared.ts", "tsconfig.json"],
+      "outputs": ["coverage/**"],
+      "env": ["DATABASE_URL"]
     }
   }
 }

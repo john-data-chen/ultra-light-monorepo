@@ -169,6 +169,7 @@ AI agent 是受治理的協作開發者，而非可自行 commit 的自動程式
 - **Skill 與 task 拆解** — 唯讀規劃 → 人工審查 → 單步執行 → 逐步驗證。
 - **生成邊界控制** — Zod 強制 I/O contract；測試 mock PostgreSQL／第三方；HSTS／CSP 依 `dev` 與 prod 切換。
 - **Session handoff** — task 與 session log 讓任何模型從中斷處包含但不限於 token 或 session 耗盡 / 不可預期的崩潰 接手。
+- **Token 紀律** — 所有 AI 工作都透過全域 **caveman** skill 進行，以降低 token 消耗；輸出保持精簡但完整保留技術內容。
 - **交付紀律** — 每次變更都明確掌握需求、風險與影響範圍，並須通過上線前驗證（lint／build／check／tests）才能合併。
 
 ### 可衡量的影響
@@ -193,6 +194,8 @@ Skills 會提交到 repo，並透過 `AGENTS.md` / `CLAUDE.md` 提供給 AI assi
 | [prisma official AI guide](https://www.prisma.io/docs/ai)（cli、client-api、database-setup、postgres、driver-adapter-implementation） | Prisma ORM 工作流：CLI 指令、client API、provider 設定、Prisma Postgres、driver adapters    |
 | [svelte-code-writer](https://svelte.dev/docs/ai/skills)                                                                               | 用於在建立/編輯任何 `.svelte` 檔案時尋找技術文件和進行程式碼分析的 CLI 工具                 |
 | [svelte-core-bestpractices](https://svelte.dev/docs/ai/skills)                                                                        | 編寫快速、健壯、現代的 Svelte 程式碼的指南。                                                |
+
+> **[caveman](https://github.com/juliusbrussee/caveman)** 為全域 skill（未提交至 `.agents/skills/`）。它精簡所有 AI 輸出以降低 token 消耗（60-90%），本 repo 每項任務皆使用。
 
 ### MCP（Model Context Protocol）Servers
 
