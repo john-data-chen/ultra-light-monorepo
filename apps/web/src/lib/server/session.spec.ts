@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("$env/dynamic/private", () => ({
   env: { API_BASE_URL: "http://localhost:3001" }

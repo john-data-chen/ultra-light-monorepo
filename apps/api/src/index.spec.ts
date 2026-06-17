@@ -361,7 +361,7 @@ describe("types.ts", () => {
   it("exports AppEnv interface", async () => {
     const types = await import("./types.js");
     expect(types).toBeDefined();
-    expect(typeof types.SessionUser).toBe("undefined");
+    expect(typeof (types as any).SessionUser).toBe("undefined");
     const typeModule: any = await import("./types.js");
     expect(typeModule).toBeDefined();
   });
@@ -376,17 +376,6 @@ describe("vercel.ts", () => {
 });
 
 describe("Transactions - additional coverage", () => {
-  const mockTransaction = {
-    id: 1,
-    userId: 1,
-    type: "expense",
-    category: "Food",
-    amount: 100,
-    occurredOn: new Date("2025-01-15"),
-    note: "Lunch",
-    createdAt: new Date("2025-01-15T12:00:00Z")
-  } as any;
-
   describe("GET /api/transactions/:id with invalid ID", () => {
     it("returns 400 for non-numeric ID", async () => {
       const cookie = makeSessionCookie(1);
