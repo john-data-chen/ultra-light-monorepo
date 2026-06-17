@@ -190,6 +190,8 @@ The Admin Governance view aggregates per-user activity (transaction counts, tota
 
 **[Live API Docs →](https://ultra-light-monorepo-web.vercel.app/api/docs)** — interactive OpenAPI 3.1 reference (Scalar UI).
 
+The docs are public: no login or permission is required to view `/api/docs` or `/api/openapi.json`, and every visitor — signed in or not — gets an **API Docs** link in the app header.
+
 The Hono.js API (`apps/api`) owns all business logic and data access. SvelteKit (`apps/web`) proxies requests server-to-server via `apiFetch()`, preserving SSR/SEO and keeping cookies same-origin for the browser.
 
 Full CRUD endpoints (`/api/transactions`, `/api/stats`, `/api/auth`, `/api/admin`) with cookie-based auth, per-user data isolation, pagination, and rate limiting. The OpenAPI 3.1 spec is served at `/api/openapi.json` and rendered via Scalar at `/api/docs`.

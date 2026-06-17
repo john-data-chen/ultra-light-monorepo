@@ -190,6 +190,8 @@ Category 固定定義於 `src/lib/categories.ts`；session cookie 使用 `.env` 
 
 **[Live API 文件 →](https://ultra-light-monorepo-web.vercel.app/api/docs)** — 互動式 OpenAPI 3.1 參考文件（Scalar UI）。
 
+API 文件為公開：瀏覽 `/api/docs` 或 `/api/openapi.json` 不需登入或權限，且每位訪客（無論是否登入）都會在 app header 看到 **API Docs** 連結。
+
 獨立的 REST 層（`/api/transactions`、`/api/stats`）提供完整 CRUD，含 cookie-based 驗證、逐使用者資料隔離、分頁與 `429` 限流 — 這正是前端、行動端或外部系統整合會串接的 API／資料流／權限邊界。每個 endpoint 的請求／回應形狀都以單一 **Zod schema** 定義（唯一真相來源），同時驅動執行時驗證與 `/api/openapi.json` 的即時 OpenAPI 3.1 規範，並透過 `/api/docs` 的 Scalar 呈現。文件由 schema 產生，因此永遠不會與實作脫節。
 
 ---
