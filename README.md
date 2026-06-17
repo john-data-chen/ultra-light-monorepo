@@ -2,15 +2,15 @@
 
 [![codecov](https://codecov.io/gh/john-data-chen/ultra-light-monorepo/graph/badge.svg?token=GTgQxmf2hR)](https://codecov.io/gh/john-data-chen/ultra-light-monorepo)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_ultra-light-monorepo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_ultra-light-monorepo)
-[![CI](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml)
+[![CI](https://github.com/john-data-chen/ultra-light-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/ultra-light-monorepo/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A product-level monorepo centered around a real, multi-user (family) **online ledger**, where all accounts can add expenses and income, and view statistics. The administrator account can view the transaction history of all accounts.
 
 Built as a **Turborepo monorepo** with a standalone **Hono.js API** backend and a **SvelteKit** frontend, deployed as two separate Vercel projects. UI uses **shadcn-svelte** components with Tailwind CSS v4.
 
-**[Live Demo](https://sveltekit-starter-kit.vercel.app/login)** — press **Continue With Email** to sign in instantly as a seeded demo user.
-**[Live API Docs](https://sveltekit-starter-kit.vercel.app/api/docs)** — interactive OpenAPI 3.1 reference (Scalar UI).
+**[Live Demo](https://ultra-light-monorepo-web.vercel.app/login)** — press **Continue With Email** to sign in instantly as a seeded demo user.
+**[Live API Docs](https://ultra-light-monorepo-web.vercel.app/api/docs)** — interactive OpenAPI 3.1 reference (Scalar UI).
 
 繁體中文版本請見 **[README-cht.md](./README-cht.md)**.
 
@@ -32,6 +32,20 @@ Built as a **Turborepo monorepo** with a standalone **Hono.js API** backend and 
     <td align="center"><b>API Docs</b></td>
   </tr>
 </table>
+
+---
+
+## Project Lineage
+
+This monorepo is the next-generation evolution of **[sveltekit-starter-kit](https://github.com/john-data-chen/sveltekit-starter-kit)** — a production-grade, fully-tested full-stack SvelteKit application. The previous generation proved the product end-to-end; this generation re-architects that foundation for production scale.
+
+| Previous generation — [sveltekit-starter-kit](https://github.com/john-data-chen/sveltekit-starter-kit) | This project — ultra-light-monorepo                                                                    |
+| ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
+| Single full-stack SvelteKit app                                                                        | Decoupled **Hono.js API** + **SvelteKit** frontend, deployed as two independent Vercel projects        |
+| One codebase                                                                                           | **Turborepo monorepo** with shared `packages/*` (db, Zod schemas, UI) and pnpm Catalog version pinning |
+| Cold CI builds                                                                                         | **Vercel Remote Cache** — build/lint/test artifacts shared across machines and CI (`FULL TURBO`)       |
+
+Both are interview portfolio pieces: the starter kit demonstrates a complete, quality-gated SvelteKit product, and this monorepo demonstrates the architectural leap to decoupled services, shared-package design, and cache-optimized CI/CD.
 
 ---
 
@@ -174,7 +188,9 @@ The Admin Governance view aggregates per-user activity (transaction counts, tota
 
 ## REST API & OpenAPI Documentation
 
-**[Live API Docs →](https://sveltekit-starter-kit.vercel.app/api/docs)** — interactive OpenAPI 3.1 reference (Scalar UI).
+**[Live API Docs →](https://ultra-light-monorepo-web.vercel.app/api/docs)** — interactive OpenAPI 3.1 reference (Scalar UI).
+
+The docs are public: no login or permission is required to view `/api/docs` or `/api/openapi.json`, and every visitor — signed in or not — gets an **API Docs** link in the app header.
 
 The Hono.js API (`apps/api`) owns all business logic and data access. SvelteKit (`apps/web`) proxies requests server-to-server via `apiFetch()`, preserving SSR/SEO and keeping cookies same-origin for the browser.
 

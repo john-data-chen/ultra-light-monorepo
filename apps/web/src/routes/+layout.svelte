@@ -20,27 +20,28 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-{#if data.user}
-  <header class="border-border bg-background border-b">
-    <div
-      class="mx-auto flex max-w-3xl flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
-    >
-      <nav class="flex w-full flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium sm:w-auto">
+<header class="border-border bg-background border-b">
+  <div
+    class="mx-auto flex max-w-3xl flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+  >
+    <nav class="flex w-full flex-wrap items-center gap-x-4 gap-y-2 text-sm font-medium sm:w-auto">
+      {#if data.user}
         <a href={resolve("/")} class="text-foreground hover:underline">{m.nav_dashboard()}</a>
         <a href={resolve("/transactions")} class="text-foreground hover:underline">
           {m.nav_transactions()}
         </a>
         {#if data.user.role === "admin"}
           <a href={resolve("/admin")} class="text-foreground hover:underline">{m.nav_admin()}</a>
-          <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-          <a href="/api/docs" class="text-foreground hover:underline">{m.nav_api_docs()}</a>
         {/if}
-      </nav>
-      <div
-        class="flex w-full flex-wrap items-center gap-2 text-sm sm:w-auto sm:justify-end sm:gap-3"
-      >
-        <LocaleSwitcher />
-        <ThemeToggle />
+      {/if}
+      <!-- Public: API docs need no login/permission, so this link shows for everyone. -->
+      <!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
+      <a href="/api/docs" class="text-foreground hover:underline">{m.nav_api_docs()}</a>
+    </nav>
+    <div class="flex w-full flex-wrap items-center gap-2 text-sm sm:w-auto sm:justify-end sm:gap-3">
+      <LocaleSwitcher />
+      <ThemeToggle />
+      {#if data.user}
         <span aria-hidden="true" class="shrink-0">{data.user.avatar}</span>
         <span class="font-medium whitespace-nowrap">{data.user.name}</span>
         <form method="POST" action="/logout" class="shrink-0" use:enhance>
@@ -48,11 +49,13 @@
             {m.sign_out()}
           </Button>
         </form>
-      </div>
+      {/if}
     </div>
-  </header>
+  </div>
+</header>
+{#if data.user}
   <main class="mx-auto max-w-3xl p-4">{@render children()}</main>
 {:else}
-  <div class="fixed top-4 right-4 z-10 flex gap-2"><LocaleSwitcher /><ThemeToggle /></div>
+  <!-- The login page provides its own <main>; don't wrap (avoids nested <main>). -->
   {@render children()}
 {/if}

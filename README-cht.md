@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/gh/john-data-chen/ultra-light-monorepo/graph/badge.svg?token=GTgQxmf2hR)](https://codecov.io/gh/john-data-chen/ultra-light-monorepo)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_ultra-light-monorepo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_ultra-light-monorepo)
-[![CI](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml)
+[![CI](https://github.com/john-data-chen/ultra-light-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/ultra-light-monorepo/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 產品級別的 monorepo 架構，以真實可用的多使用者 **線上記帳本** 為核心。所有帳號都可以新增支出、收入，並查看統計資訊。管理帳號可以看到所有帳號的交易紀錄。
@@ -11,7 +11,7 @@
 
 英文版本請見 **[README.md](./README.md)**。
 
-**[Live Demo](https://sveltekit-starter-kit.vercel.app/login)** — 按下 **以 Email 繼續** 即可用已建立的使用者登入。
+**[Live Demo](https://ultra-light-monorepo-web.vercel.app/login)** — 按下 **以 Email 繼續** 即可用已建立的使用者登入。
 
 <table>
   <tr>
@@ -31,6 +31,20 @@
     <td align="center"><b>API 文件</b></td>
   </tr>
 </table>
+
+---
+
+## 專案演進 (Project Lineage)
+
+本 monorepo 是上一代 **[sveltekit-starter-kit](https://github.com/john-data-chen/sveltekit-starter-kit)** 的次世代演進版 — 一個 production 級、完整測試的全端 SvelteKit 應用。上一代已端對端驗證產品可行性；本代則將該基礎重新架構，邁向 production 規模。
+
+| 上一代 — [sveltekit-starter-kit](https://github.com/john-data-chen/sveltekit-starter-kit) | 本專案 — ultra-light-monorepo                                                           |
+| ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| 單一全端 SvelteKit 應用                                                                   | 前後端分離的 **Hono.js API** + **SvelteKit** 前端，部署為兩個獨立 Vercel 專案           |
+| 單一 codebase                                                                             | **Turborepo monorepo**，共用 `packages/*`（db、Zod schemas、UI）+ pnpm Catalog 版本鎖定 |
+| 冷啟動 CI 建置                                                                            | **Vercel Remote Cache** — build/lint/test 產物跨機器與 CI 共享（`FULL TURBO`）          |
+
+兩者皆為面試作品集：starter kit 展示完整、具品質門檻的 SvelteKit 產品，而本 monorepo 展示邁向解耦服務、共用套件設計與快取優化 CI/CD 的架構躍進。
 
 ---
 
@@ -174,7 +188,9 @@ Category 固定定義於 `src/lib/categories.ts`；session cookie 使用 `.env` 
 
 ## REST API 與 OpenAPI 文件
 
-**[Live API 文件 →](https://sveltekit-starter-kit.vercel.app/api/docs)** — 互動式 OpenAPI 3.1 參考文件（Scalar UI）。
+**[Live API 文件 →](https://ultra-light-monorepo-web.vercel.app/api/docs)** — 互動式 OpenAPI 3.1 參考文件（Scalar UI）。
+
+API 文件為公開：瀏覽 `/api/docs` 或 `/api/openapi.json` 不需登入或權限，且每位訪客（無論是否登入）都會在 app header 看到 **API Docs** 連結。
 
 獨立的 REST 層（`/api/transactions`、`/api/stats`）提供完整 CRUD，含 cookie-based 驗證、逐使用者資料隔離、分頁與 `429` 限流 — 這正是前端、行動端或外部系統整合會串接的 API／資料流／權限邊界。每個 endpoint 的請求／回應形狀都以單一 **Zod schema** 定義（唯一真相來源），同時驅動執行時驗證與 `/api/openapi.json` 的即時 OpenAPI 3.1 規範，並透過 `/api/docs` 的 Scalar 呈現。文件由 schema 產生，因此永遠不會與實作脫節。
 
