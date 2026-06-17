@@ -30,7 +30,7 @@
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.61.0",
     "@ultra-light/db": "workspace:*",
-    "@vitest/coverage-v8": "4.1.9",
+    "@vitest/coverage-v8": "catalog:",
     "commitizen": "^4.3.2",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
@@ -41,10 +41,10 @@
     "lint-staged": "^17.0.7",
     "oxfmt": "^0.55.0",
     "oxlint": "^1.70.0",
-    "tsx": "4.22.4",
+    "tsx": "catalog:",
     "turbo": "^2.9.18",
     "typescript-eslint": "^8.61.1",
-    "vitest": "^4.1.9"
+    "vitest": "catalog:"
   },
   "lint-staged": {
     "*.{js,mjs,cjs,ts}": [

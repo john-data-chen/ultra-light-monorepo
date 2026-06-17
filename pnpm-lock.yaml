@@ -4,6 +4,39 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    '@prisma/adapter-pg':
+      specifier: ^7.8.0
+      version: 7.8.0
+    '@prisma/client':
+      specifier: ^7.8.0
+      version: 7.8.0
+    '@vitest/coverage-v8':
+      specifier: 4.1.9
+      version: 4.1.9
+    pg:
+      specifier: ^8.21.0
+      version: 8.21.0
+    prisma:
+      specifier: ^7.8.0
+      version: 7.8.0
+    svelte:
+      specifier: ^5.56.3
+      version: 5.56.3
+    tsx:
+      specifier: 4.22.4
+      version: 4.22.4
+    typescript:
+      specifier: ^6.0.3
+      version: 6.0.3
+    vitest:
+      specifier: ^4.1.9
+      version: 4.1.9
+    zod:
+      specifier: ^4.4.3
+      version: 4.4.3
+
 importers:
 
   .:
@@ -27,7 +60,7 @@ importers:
         specifier: workspace:*
         version: link:packages/db
       '@vitest/coverage-v8':
-        specifier: 4.1.9
+        specifier: 'catalog:'
         version: 4.1.9(vitest@4.1.9)
       commitizen:
         specifier: ^4.3.2
@@ -60,7 +93,7 @@ importers:
         specifier: ^1.70.0
         version: 1.70.0
       tsx:
-        specifier: 4.22.4
+        specifier: 'catalog:'
         version: 4.22.4
       turbo:
         specifier: ^2.9.18
@@ -69,7 +102,7 @@ importers:
         specifier: ^8.61.1
         version: 8.61.1(eslint@10.5.0(jiti@2.7.0))(typescript@6.0.3)
       vitest:
-        specifier: ^4.1.9
+        specifier: 'catalog:'
         version: 4.1.9(@types/node@25.9.3)(@vitest/coverage-v8@4.1.9)(jsdom@29.1.1)(vite@8.0.16(@types/node@25.9.3)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
 
   apps/api:
@@ -78,10 +111,10 @@ importers:
         specifier: ^2.0.5
         version: 2.0.5(hono@4.12.25)
       '@prisma/adapter-pg':
-        specifier: ^7.8.0
+        specifier: 'catalog:'
         version: 7.8.0
       '@prisma/client':
-        specifier: ^7.8.0
+        specifier: 'catalog:'
         version: 7.8.0(prisma@7.8.0(@types/react@19.2.17)(magicast@0.5.3)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@6.0.3))(typescript@6.0.3)
       '@scalar/hono-api-reference':
         specifier: ^0.11.3
@@ -96,26 +129,26 @@ importers:
         specifier: ^4.12.25
         version: 4.12.25
       pg:
-        specifier: ^8.21.0
+        specifier: 'catalog:'
         version: 8.21.0
     devDependencies:
       '@ultra-light/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@vitest/coverage-v8':
-        specifier: 4.1.9
+        specifier: 'catalog:'
         version: 4.1.9(vitest@4.1.9)
       esbuild:
         specifier: ^0.28.1
         version: 0.28.1
       tsx:
-        specifier: 4.22.4
+        specifier: 'catalog:'
         version: 4.22.4
       typescript:
-        specifier: ^6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       vitest:
-        specifier: ^4.1.9
+        specifier: 'catalog:'
         version: 4.1.9(@types/node@25.9.3)(@vitest/coverage-v8@4.1.9)(jsdom@29.1.1)(vite@8.0.16(@types/node@25.9.3)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
 
   apps/web:
@@ -139,7 +172,7 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
       zod:
-        specifier: ^4.4.3
+        specifier: 'catalog:'
         version: 4.4.3
     devDependencies:
       '@inlang/paraglide-js':
@@ -170,13 +203,13 @@ importers:
         specifier: 24.13.2
         version: 24.13.2
       '@vitest/coverage-v8':
-        specifier: 4.1.9
+        specifier: 'catalog:'
         version: 4.1.9(vitest@4.1.9)
       jsdom:
         specifier: ^29.1.1
         version: 29.1.1
       svelte:
-        specifier: ^5.56.3
+        specifier: 'catalog:'
         version: 5.56.3(@typescript-eslint/types@8.61.1)
       svelte-check:
         specifier: ^4.6.0
@@ -185,28 +218,28 @@ importers:
         specifier: ^4.3.1
         version: 4.3.1
       typescript:
-        specifier: ^6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       vite:
         specifier: ^8.0.16
         version: 8.0.16(@types/node@24.13.2)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0)
       vitest:
-        specifier: ^4.1.9
+        specifier: 'catalog:'
         version: 4.1.9(@types/node@24.13.2)(@vitest/coverage-v8@4.1.9)(jsdom@29.1.1)(vite@8.0.16(@types/node@24.13.2)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
 
   packages/db:
     dependencies:
       '@prisma/adapter-pg':
-        specifier: ^7.8.0
+        specifier: 'catalog:'
         version: 7.8.0
       '@prisma/client':
-        specifier: ^7.8.0
+        specifier: 'catalog:'
         version: 7.8.0(prisma@7.8.0(@types/react@19.2.17)(magicast@0.5.3)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@6.0.3))(typescript@6.0.3)
       '@ultra-light/shared':
         specifier: workspace:*
         version: link:../shared
       pg:
-        specifier: ^8.21.0
+        specifier: 'catalog:'
         version: 8.21.0
     devDependencies:
       '@types/pg':
@@ -216,35 +249,35 @@ importers:
         specifier: workspace:*
         version: link:../typescript-config
       '@vitest/coverage-v8':
-        specifier: 4.1.9
+        specifier: 'catalog:'
         version: 4.1.9(vitest@4.1.9)
       prisma:
-        specifier: ^7.8.0
+        specifier: 'catalog:'
         version: 7.8.0(@types/react@19.2.17)(magicast@0.5.3)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@6.0.3)
       typescript:
-        specifier: ^6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       vitest:
-        specifier: ^4.1.9
+        specifier: 'catalog:'
         version: 4.1.9(@types/node@25.9.3)(@vitest/coverage-v8@4.1.9)(jsdom@29.1.1)(vite@8.0.16(@types/node@25.9.3)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
 
   packages/shared:
     dependencies:
       zod:
-        specifier: ^4.4.3
+        specifier: 'catalog:'
         version: 4.4.3
     devDependencies:
       '@ultra-light/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@vitest/coverage-v8':
-        specifier: 4.1.9
+        specifier: 'catalog:'
         version: 4.1.9(vitest@4.1.9)
       typescript:
-        specifier: ^6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
       vitest:
-        specifier: ^4.1.9
+        specifier: 'catalog:'
         version: 4.1.9(@types/node@25.9.3)(@vitest/coverage-v8@4.1.9)(jsdom@29.1.1)(vite@8.0.16(@types/node@25.9.3)(esbuild@0.28.1)(jiti@2.7.0)(tsx@4.22.4)(yaml@2.9.0))
 
   packages/typescript-config: {}
@@ -271,10 +304,10 @@ importers:
         specifier: workspace:*
         version: link:../typescript-config
       svelte:
-        specifier: ^5.56.3
+        specifier: 'catalog:'
         version: 5.56.3(@typescript-eslint/types@8.61.1)
       typescript:
-        specifier: ^6.0.3
+        specifier: 'catalog:'
         version: 6.0.3
 
 packages:
