@@ -1,6 +1,6 @@
 # Ultra Light Monorepo：多使用者線上記帳本 — Hono API + SvelteKit 前端
 
-[![codecov](https://codecov.io/gh/john-data-chen/ultra-light-monorepo/graph/badge.svg?token=GTgQxmf2hR&flag=apps/api)](https://codecov.io/gh/john-data-chen/ultra-light-monorepo)
+[![codecov](https://codecov.io/gh/john-data-chen/ultra-light-monorepo/graph/badge.svg?token=GTgQxmf2hR)](https://codecov.io/gh/john-data-chen/ultra-light-monorepo)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_ultra-light-monorepo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_ultra-light-monorepo)
 [![CI](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -74,6 +74,29 @@ UI 以 **shadcn-svelte**（Tailwind v4 + bits-ui primitives）建構，並抽取
 | Charts        | Pure CSS donut                                 | 不引入圖表套件，減少打包體積並保留完整控制                                             |
 | i18n          | Paraglide JS（`@inlang/paraglide-js`）         | 類型安全、tree-shakeable 翻譯；支援英文與繁體中文                                      |
 | Deploy        | 兩個 Vercel 專案（web + api）                  | SvelteKit 使用 `adapter-vercel`，Hono API 使用 `@hono/node-server`；Turborepo 驅動建置 |
+
+### Monorepo 建置流程
+
+套件版本集中管理，`apps/*` 與 `packages/*` 不再宣告衝突的版本；Turborepo 任務圖同時做本機 **與** 遠端快取，達成快速且可重現的建置。
+
+**pnpm Catalog（版本的唯一真相來源）** — 共用依賴在 `pnpm-workspace.yaml` 的 `catalog:` 只宣告一次；各 package 以 `"dep": "catalog:"` 引用。
+
+| 優點           | 說明                                                                            |
+| -------------- | ------------------------------------------------------------------------------- |
+| 零版本漂移     | 全 repo 每個依賴只有一個版本（typescript、vitest、svelte、prisma 套件群、zod…） |
+| 一行升級       | 只改 `pnpm-workspace.yaml` 一處，所有 package 跟著更新                          |
+| 穩定 cache key | 解析後版本一致 → Turborepo hash 穩定 → 提高快取命中率                           |
+
+**Turborepo Remote Cache（Vercel）** — `turbo link` 將 repo 連到 Vercel team；build/lint/test 產物跨機器與 CI 共享。
+
+| 優點            | 說明                                                                                                             |
+| --------------- | ---------------------------------------------------------------------------------------------------------------- |
+| 共享運算        | 一台機器（或 CI）跑過的任務，所有地方都能還原 — 同一 hash 不重算第二次                                           |
+| CI `FULL TURBO` | 未變動的 package 從快取秒級還原，不必重跑 build/test                                                             |
+| 全團隊命中      | 隊友與 CI 拉取同一份快取，乾淨 checkout 也能首次命中                                                             |
+| 精準失效        | 每個 task 在 `turbo.json` 明確宣告 `inputs`/`outputs`/`env`（如測試用 `DATABASE_URL`），只有相關變動才使快取失效 |
+
+所有指令皆從 repo 根目錄經 Turborepo 執行（`pnpm lint` / `pnpm format` / `pnpm test` / `pnpm build`）；共用設定放在 `vitest.shared.ts` 與 `packages/typescript-config/base.json`。
 
 ### 品質保證
 
@@ -437,8 +460,9 @@ pnpm db:seed       # Seed demo users + sample transactions
 ├── .mcp.json                         # MCP server 設定（svelte、context7 等）
 ├── commitlint.config.mjs             # Conventional commit 規則
 ├── sonar-project.properties          # SonarQube 專案設定
-├── turbo.json                        # Turborepo pipeline 設定
-├── pnpm-workspace.yaml               # Workspace 定義
+├── vitest.shared.ts                  # 共用 Vitest 基礎設定（api/db/shared 繼承）
+├── turbo.json                        # Turborepo pipeline + 遠端快取（每 task 明確 inputs/outputs/env）
+├── pnpm-workspace.yaml               # Workspace 定義 + catalog（集中管理依賴版本）
 └── package.json                      # 委派給 turbo 的根 scripts
 ```
 

@@ -1,6 +1,6 @@
 # Ultra Light Monorepo: Multi-user Online Ledger with Hono API + SvelteKit Frontend
 
-[![codecov](https://codecov.io/gh/john-data-chen/ultra-light-monorepo/graph/badge.svg?token=GTgQxmf2hR&flag=apps/api)](https://codecov.io/gh/john-data-chen/ultra-light-monorepo)
+[![codecov](https://codecov.io/gh/john-data-chen/ultra-light-monorepo/graph/badge.svg?token=GTgQxmf2hR)](https://codecov.io/gh/john-data-chen/ultra-light-monorepo)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=john-data-chen_ultra-light-monorepo&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=john-data-chen_ultra-light-monorepo)
 [![CI](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/john-data-chen/sveltekit-starter-kit/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -75,6 +75,29 @@ UI is built on **shadcn-svelte** (Tailwind v4 + bits-ui primitives), extracted i
 | Charts        | Pure CSS donut                                 | Zero charting dependency — smaller bundle, full control                                                       |
 | i18n          | Paraglide JS (`@inlang/paraglide-js`)          | Type-safe, tree-shakeable messages; English + Traditional Chinese                                             |
 | Deploy        | Two Vercel projects (web + api)                | SvelteKit on `adapter-vercel`, Hono API on `@hono/node-server`; Turborepo drives build pipeline               |
+
+### Monorepo Build Pipeline
+
+Dependency versions are managed centrally so `apps/*` and `packages/*` never declare conflicting versions, and the Turborepo task graph is cached locally **and** remotely for fast, reproducible builds.
+
+**pnpm Catalog (single source of truth for versions)** — shared dependencies are declared once under `catalog:` in `pnpm-workspace.yaml`; every package references them with `"dep": "catalog:"`.
+
+| Benefit          | Detail                                                                                             |
+| ---------------- | -------------------------------------------------------------------------------------------------- |
+| Zero drift       | One version per dependency across the whole repo (typescript, vitest, svelte, prisma stack, zod …) |
+| One-line upgrade | Bump a version in `pnpm-workspace.yaml` and every package follows                                  |
+| Stable cache key | Identical resolved versions keep Turborepo hashes stable → higher cache hit rate                   |
+
+**Turborepo Remote Cache (Vercel)** — `turbo link` connects the repo to a Vercel team; build/lint/test artifacts are shared across machines and CI.
+
+| Benefit            | Detail                                                                                                                                        |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Shared compute     | A task run on one machine (or CI) is restored everywhere — never recompute the same hash twice                                                |
+| `FULL TURBO` in CI | Unchanged packages restore from cache in seconds instead of re-running build/test                                                             |
+| Team-wide hits     | Teammates and CI pull the same cache, so a clean checkout can hit on the first run                                                            |
+| Tuned invalidation | Each task declares explicit `inputs`/`outputs`/`env` (e.g. `DATABASE_URL` for tests) in `turbo.json`, so only relevant changes bust the cache |
+
+All commands run from the repo root via Turborepo (`pnpm lint` / `pnpm format` / `pnpm test` / `pnpm build`); shared config lives in `vitest.shared.ts` and `packages/typescript-config/base.json`.
 
 ### Quality Assurance
 
@@ -441,8 +464,9 @@ pnpm db:seed       # Seed demo users + sample transactions
 ├── .mcp.json                         # MCP server config (svelte, context7, etc.)
 ├── commitlint.config.mjs             # Conventional commit rules
 ├── sonar-project.properties          # SonarQube project config
-├── turbo.json                        # Turborepo pipeline config
-├── pnpm-workspace.yaml               # Workspace definition
+├── vitest.shared.ts                  # Shared Vitest base config (extended by api/db/shared)
+├── turbo.json                        # Turborepo pipeline + remote cache (per-task inputs/outputs/env)
+├── pnpm-workspace.yaml               # Workspace definition + catalog (central dependency versions)
 └── package.json                      # Root scripts delegating to turbo
 ```
 

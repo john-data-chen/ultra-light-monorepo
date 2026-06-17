@@ -27,9 +27,6 @@
     "lint": {
       "inputs": ["src/**", ".oxlintrc.json", "eslint.config.js"]
     },
-    "format": {
-      "inputs": ["src/**", "*.{js,ts,json,css,html,md,svelte}"]
-    },
     "test": {
       "dependsOn": ["^build"],
       "inputs": ["src/**", "vitest.config.ts", "vitest.shared.ts", "tsconfig.json"],

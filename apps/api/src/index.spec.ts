@@ -37,10 +37,12 @@ import {
   listTransactionsPaged,
   createTransaction,
   getTransaction,
+  updateTransaction,
   deleteTransaction,
   recordAudit,
   getMonthlyStats,
-  listUsersWithStats
+  listUsersWithStats,
+  listRecentAudits
 } from "@ultra-light/db";
 
 import app from "./index.js";
@@ -352,5 +354,317 @@ describe("404", () => {
     expect(res.status).toBe(404);
     const body = await res.json();
     expect(body.message).toBe("Not Found");
+  });
+});
+
+describe("types.ts", () => {
+  it("exports AppEnv interface", async () => {
+    const types = await import("./types.js");
+    expect(types).toBeDefined();
+    expect(typeof (types as any).SessionUser).toBe("undefined");
+    const typeModule: any = await import("./types.js");
+    expect(typeModule).toBeDefined();
+  });
+});
+
+describe("vercel.ts", () => {
+  it("exports a function (getRequestListener result)", async () => {
+    const vercel = await import("./vercel.js");
+    expect(vercel.default).toBeDefined();
+    expect(typeof vercel.default).toBe("function");
+  });
+});
+
+describe("Transactions - additional coverage", () => {
+  describe("GET /api/transactions/:id with invalid ID", () => {
+    it("returns 400 for non-numeric ID", async () => {
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/transactions/foo", {
+        headers: { Cookie: cookie }
+      });
+      expect(res.status).toBe(400);
+      const body = await res.json();
+      expect(body.message).toBe("Invalid ID");
+    });
+  });
+
+  describe("PATCH /api/transactions/:id", () => {
+    const stringDateTransaction = {
+      id: 1,
+      userId: 1,
+      type: "expense",
+      category: "Food",
+      amount: 100,
+      occurredOn: "2025-01-15",
+      note: "Lunch",
+      createdAt: new Date("2025-01-15T12:00:00Z")
+    } as any;
+
+    it("updates a transaction", async () => {
+      vi.mocked(getTransaction).mockResolvedValue(stringDateTransaction);
+      vi.mocked(updateTransaction).mockResolvedValue(stringDateTransaction);
+      vi.mocked(recordAudit).mockResolvedValue(undefined as never);
+
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/transactions/1", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookie
+        },
+        body: JSON.stringify({ amount: 200 })
+      });
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.id).toBe(1);
+    });
+
+    it("returns 400 for invalid ID", async () => {
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/transactions/foo", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookie
+        },
+        body: JSON.stringify({ amount: 200 })
+      });
+      expect(res.status).toBe(400);
+    });
+
+    it("returns 400 for invalid JSON body", async () => {
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/transactions/1", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookie
+        },
+        body: "not json"
+      });
+      expect(res.status).toBe(400);
+    });
+
+    it("returns 400 for validation error", async () => {
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/transactions/1", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookie
+        },
+        body: JSON.stringify({ type: "invalid" })
+      });
+      expect(res.status).toBe(400);
+    });
+
+    it("returns 404 when transaction not found", async () => {
+      vi.mocked(getTransaction).mockResolvedValue(null);
+
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/transactions/999", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookie
+        },
+        body: JSON.stringify({ amount: 200 })
+      });
+      expect(res.status).toBe(404);
+    });
+
+    it("returns 404 when updateTransaction returns null", async () => {
+      vi.mocked(getTransaction).mockResolvedValue(stringDateTransaction);
+      vi.mocked(updateTransaction).mockResolvedValue(null);
+
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/transactions/1", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: cookie
+        },
+        body: JSON.stringify({ amount: 200 })
+      });
+      expect(res.status).toBe(404);
+    });
+  });
+
+  describe("DELETE /api/transactions/:id", () => {
+    it("returns 400 for invalid ID", async () => {
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/transactions/foo", {
+        method: "DELETE",
+        headers: { Cookie: cookie }
+      });
+      expect(res.status).toBe(400);
+    });
+
+    it("returns 404 when transaction not found", async () => {
+      vi.mocked(deleteTransaction).mockResolvedValue(null as any);
+
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/transactions/999", {
+        method: "DELETE",
+        headers: { Cookie: cookie }
+      });
+      expect(res.status).toBe(404);
+    });
+  });
+
+  describe("POST /api/transactions - invalid JSON", () => {
+    it("returns 400 for non-JSON body", async () => {
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/transactions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "text/plain",
+          Cookie: cookie
+        },
+        body: "not json"
+      });
+      expect(res.status).toBe(400);
+    });
+  });
+});
+
+describe("Auth - additional coverage", () => {
+  describe("GET /api/auth/me", () => {
+    it("returns 401 for invalid session cookie (tampered signature)", async () => {
+      const cookie = makeSessionCookie(1);
+      const tampered = cookie.replace(/([a-zA-Z0-9_-]+)$/, "tampered");
+      const res = await app.request("/api/auth/me", {
+        headers: { Cookie: tampered }
+      });
+      expect(res.status).toBe(401);
+    });
+
+    it("returns 401 when user not found after valid session", async () => {
+      mockDb.user.findUnique.mockResolvedValue(null);
+
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/auth/me", {
+        headers: { Cookie: cookie }
+      });
+      expect(res.status).toBe(401);
+    });
+  });
+});
+
+describe("Auth middleware - missing user", () => {
+  it("returns 401 when user not found via authMiddleware", async () => {
+    mockDb.user.findUnique.mockResolvedValue(null);
+
+    const cookie = makeSessionCookie(1);
+    const res = await app.request("/api/transactions", {
+      headers: { Cookie: cookie }
+    });
+    expect(res.status).toBe(401);
+  });
+});
+
+describe("Admin - additional coverage", () => {
+  describe("GET /api/admin/audit", () => {
+    it("returns audit logs for admin", async () => {
+      mockDb.user.findUnique.mockResolvedValue({
+        id: 1,
+        name: "Admin",
+        avatar: "👤",
+        role: "admin"
+      });
+      vi.mocked(listRecentAudits).mockResolvedValue([
+        { id: 1, userId: 1, action: "create", entity: "transaction", entityId: 1, detail: "test" }
+      ] as any);
+
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/admin/audit", {
+        headers: { Cookie: cookie }
+      });
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body).toHaveLength(1);
+    });
+  });
+});
+
+describe("Stats - additional coverage", () => {
+  describe("GET /api/stats", () => {
+    it("returns 400 for invalid month format", async () => {
+      const cookie = makeSessionCookie(1);
+      const res = await app.request("/api/stats?month=invalid", {
+        headers: { Cookie: cookie }
+      });
+      expect(res.status).toBe(400);
+    });
+  });
+});
+
+describe("Error handler", () => {
+  it("returns 500 when createTransaction throws", async () => {
+    vi.mocked(createTransaction).mockRejectedValue(new Error("db error"));
+
+    const cookie = makeSessionCookie(1);
+    const res = await app.request("/api/transactions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: cookie
+      },
+      body: JSON.stringify({
+        type: "expense",
+        category: "Food",
+        amount: 100,
+        occurredOn: "2025-01-15",
+        note: "Lunch"
+      })
+    });
+    expect(res.status).toBe(500);
+    const body = await res.json();
+    expect(body.message).toBe("Internal Server Error");
+  });
+});
+
+describe("Rate limit", () => {
+  it("returns 429 after exceeding rate limit", async () => {
+    const { resetRateLimitStore } = await import("./middleware/rate-limit.js");
+    resetRateLimitStore();
+
+    vi.mocked(createTransaction).mockResolvedValue({
+      id: 1,
+      userId: 1,
+      type: "expense",
+      category: "Food",
+      amount: 100,
+      occurredOn: new Date("2025-01-15"),
+      note: null,
+      createdAt: new Date("2025-01-15T12:00:00Z")
+    } as any);
+    vi.mocked(recordAudit).mockResolvedValue(undefined as never);
+
+    const cookie = makeSessionCookie(1);
+    const validBody = JSON.stringify({
+      type: "expense",
+      category: "Food",
+      amount: 100,
+      occurredOn: "2025-01-15",
+      note: null
+    });
+
+    for (let i = 0; i < 101; i++) {
+      await app.request("/api/transactions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Cookie: cookie },
+        body: validBody
+      });
+    }
+
+    const res = await app.request("/api/transactions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Cookie: cookie },
+      body: validBody
+    });
+    expect(res.status).toBe(429);
+    const body = await res.json();
+    expect(body.message).toBe("Too many requests");
   });
 });
