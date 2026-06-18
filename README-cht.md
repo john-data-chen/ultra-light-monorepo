@@ -46,6 +46,16 @@
 
 兩者皆為面試作品集：starter kit 展示完整、具品質門檻的 SvelteKit 產品，而本 monorepo 展示邁向解耦服務、共用套件設計與快取優化 CI/CD 的架構躍進。
 
+### 其他作品集
+
+**[turborepo-starter-kit](https://github.com/john-data-chen/turborepo-starter-kit)**
+
+多平台 monorepo。Web (Next.js) + Mobile (React Native/Expo) + API (Nest.js)。
+
+- **AI 輔助**：AI 輔助開發加速跨平台擴展。無縫切換框架。快速產出高品質專案。
+- **架構**：共用商業邏輯 (狀態、驗證、i18n)。各平台保留專屬 UI。
+- **品質**：80%+ Vitest 覆蓋率。SonarQube A 級。Lighthouse 90+。
+
 ---
 
 | 指標           | 結果                                                                                       |

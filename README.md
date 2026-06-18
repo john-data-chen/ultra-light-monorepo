@@ -47,6 +47,16 @@ This monorepo is the next-generation evolution of **[sveltekit-starter-kit](http
 
 Both are interview portfolio pieces: the starter kit demonstrates a complete, quality-gated SvelteKit product, and this monorepo demonstrates the architectural leap to decoupled services, shared-package design, and cache-optimized CI/CD.
 
+### Another Project
+
+**[turborepo-starter-kit](https://github.com/john-data-chen/turborepo-starter-kit)**
+
+Multi-platform monorepo. Web (Next.js) + Mobile (React Native/Expo) + API (Nest.js).
+
+- **AI Leverage**: AI-assisted development accelerate cross-platform scaling. Framework switch seamless. High quality output fast.
+- **Architecture**: Shared business logic (state, validation, i18n). Platform-specific UI.
+- **Quality**: 80%+ Vitest coverage. SonarQube A grade. Lighthouse 90+.
+
 ---
 
 | Metric         | Result                                                                                           |
